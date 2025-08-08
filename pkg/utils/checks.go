@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-func CheckValidity(login_type string, identifier string) (bool, string) {
+func CheckLoginTypeValidity(login_type string, identifier string) (bool, string) {
 	switch login_type {
 	case "mobile":
 		matched, _ := regexp.MatchString(`^\d{10}$`, identifier)
@@ -18,6 +18,21 @@ func CheckValidity(login_type string, identifier string) (bool, string) {
 		}
 	default:
 		return false, "Invalid login type"
+	}
+	return true, ""
+}
+
+func CheckSignupFormValidity(email string, mobile string) (bool, string) {
+	if email != "" {
+		if !strings.Contains(email, "@") || !strings.Contains(email, ".") {
+			return false, "Invalid email format"
+		}
+	}
+	if mobile != "" {
+		matched, _ := regexp.MatchString(`^\d{10}$`, mobile)
+		if !matched {
+			return matched, "Invalid mobile no. Must be 10 digits."
+		}
 	}
 	return true, ""
 }

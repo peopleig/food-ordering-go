@@ -1,4 +1,3 @@
-/* layout.css */
 html, body {
     margin: 0;
     padding: 0;
@@ -19,7 +18,7 @@ html, body {
 }
 
 .content {
-    flex: 1; /* This makes the content expand to fill space */
+    flex: 1;
     padding: 20px;
 }
 

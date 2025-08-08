@@ -1,12 +1,11 @@
 package controllers
 
 import (
-	"database/sql"
 	"net/http"
-	"strconv"
 
 	"github.com/peopleig/food-ordering-go/pkg/middleware"
 	"github.com/peopleig/food-ordering-go/pkg/models"
+	"github.com/peopleig/food-ordering-go/pkg/types"
 	"github.com/peopleig/food-ordering-go/pkg/utils"
 )
 
@@ -24,31 +23,50 @@ func SignupHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Unable to parse form", http.StatusBadRequest)
 			return
 		}
-		login_type := r.FormValue("login_type")
-		identifier := r.FormValue("identifier")
-		password := r.FormValue("password")
+		var new_user types.NewUser
+		new_user.Role = r.FormValue("role")
+		new_user.First_name = r.FormValue("first_name")
+		new_user.Last_name = r.FormValue("last_name")
+		new_user.Email = r.FormValue("email")
+		new_user.Mobile = r.FormValue("mobile")
+		new_user.Password = r.FormValue("password")
 
-		isValid, message := utils.CheckValidity(login_type, identifier)
-		if !isValid {
-			http.Error(w, message, http.StatusBadRequest)
-		}
-
-		user, errr := models.GetUserPwdatLogin(login_type, identifier)
-		if errr != nil {
-			if errr == sql.ErrNoRows {
-				http.Error(w, "User not found", http.StatusUnauthorized)
-			} else {
-				http.Error(w, "Database error", http.StatusInternalServerError)
-			}
-		}
-
-		if !middleware.CheckPasswordHash(password, user.Hash_pwd) {
-			http.Error(w, "Incorrect password", http.StatusUnauthorized)
+		if new_user.Email == "" && new_user.Mobile == "" {
+			http.Error(w, "Atleast one of mobile/email has to be entered", http.StatusBadRequest)
 			return
 		}
-		user_id, _ := strconv.Atoi(user.User_id)
+		if new_user.First_name == "" || new_user.Last_name == "" || new_user.Role == "" || new_user.Password == "" {
+			http.Error(w, "Cannot have empty name/role/password fields", http.StatusBadRequest)
+			return
+		}
+		isValid, message := utils.CheckSignupFormValidity(new_user.Email, new_user.Mobile)
+		if !isValid {
+			http.Error(w, message, http.StatusBadRequest)
+			return
+		}
 
-		token, err := utils.GenerateJWT(user_id, user.Role)
+		new_user.Password, err = middleware.HashPassword(new_user.Password)
+		if err != nil {
+			http.Error(w, "error in hashing pwd. try again", http.StatusInternalServerError)
+			return
+		}
+		var user_id int64
+		isValid, message, user_id, err = models.CreateNewUser(&new_user)
+
+		if err != nil {
+			http.Error(w, message, http.StatusInternalServerError)
+			return
+		}
+		if !isValid {
+			http.Error(w, message, http.StatusBadRequest)
+			return
+		}
+		if new_user.Role != "customer" {
+			http.Error(w, "You haven't yet been granted approval from the admin for this role. Please wait till then", http.StatusUnauthorized)
+			return
+		}
+
+		token, err := utils.GenerateJWT(int(user_id), new_user.Role)
 		if err != nil {
 			http.Error(w, "Could not generate token", http.StatusInternalServerError)
 			return
@@ -60,14 +78,6 @@ func SignupHandler(w http.ResponseWriter, r *http.Request) {
 			SameSite: http.SameSiteStrictMode,
 		})
 		http.Redirect(w, r, "/menu", http.StatusSeeOther)
-		// switch user.Role {
-		// case "admin":
-		// 	http.Redirect(w, r, "/admin", http.StatusSeeOther)
-		// case "chef":
-		// 	http.Redirect(w, r, "/chef", http.StatusSeeOther)
-		// case "customer":
-		// 	http.Redirect(w, r, "/menu", http.StatusSeeOther)
-		// }
 
 	}
 }

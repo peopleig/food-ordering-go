@@ -36,12 +36,13 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		login_type := r.FormValue("login_type")
 		identifier := r.FormValue("identifier")
 		password := r.FormValue("password")
-
-		isValid, message := utils.CheckValidity(login_type, identifier)
+		isValid, message := utils.CheckLoginTypeValidity(login_type, identifier)
 		if !isValid {
 			http.Error(w, message, http.StatusBadRequest)
 		}
-
+		if password == "" {
+			http.Error(w, "Cannot have an empty password", http.StatusBadRequest)
+		}
 		user, errr := models.GetUserPwdatLogin(login_type, identifier)
 		if errr != nil {
 			if errr == sql.ErrNoRows {
@@ -54,6 +55,9 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		if !middleware.CheckPasswordHash(password, user.Hash_pwd) {
 			http.Error(w, "Incorrect password", http.StatusUnauthorized)
 			return
+		}
+		if !user.Approved {
+			http.Error(w, "Cheeky cheeky. But you're still not approved", http.StatusUnauthorized)
 		}
 		user_id, _ := strconv.Atoi(user.User_id)
 
