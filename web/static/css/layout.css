@@ -1,0 +1,32 @@
+/* layout.css */
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+.page-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.header {
+    background-color: black;
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+.content {
+    flex: 1; /* This makes the content expand to fill space */
+    padding: 20px;
+}
+
+.footer {
+    background-color: #f1f1f1;
+    text-align: center;
+    padding: 15px;
+    font-size: 14px;
+    color: black;
+}

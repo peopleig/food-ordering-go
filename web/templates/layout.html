@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+     <title>{{.Title}}</title>
+    <link rel="stylesheet" href="/static/css/layout.css">
+    <link rel="stylesheet" href="/static/css/{{.Title}}.css">
+</head>
+<body>
+    <div class="page-container">
+        <header class="header">
+            <h1>Neptune's Kitchen</h1>
+        </header>
+
+        <main class="content">
+            {{ block "content" . }}{{ end }}
+        </main>
+        <footer class="footer">
+            <p>&copy; 2025 Neptune's Kitchen. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>
