@@ -1,0 +1,21 @@
+{{define "content"}}
+    <h1>{{.Title}}</h1>
+    <input type="text" id="specialInstructions" placeholder="Special Instructions" />
+    <select id="orderType">
+        <option value="dine_in">Dine-In</option>
+        <option value="takeaway">Takeaway</option>
+    </select>
+    <input type="number" id="tableNo" placeholder="Table No." />
+    <button onclick="placeOrder()">Place Order</button>
+    <h2>Cart</h2>
+    <ul id="cart-list"></ul>
+    <h2>Menu</h2>
+    <ul>
+    {{range .Items}}
+        <li>{{.Item_name}} - {{.Price}} - <img src="{{.Item_img}}" style="max-height: 5rem;">
+            <button onclick="addToCart('{{.Item_id}}', '{{.Item_name}}', '{{.Price}}')" class="add-buttons">Add to Cart</button>
+        </li>
+    {{end}}
+    </ul>
+
+{{end}}

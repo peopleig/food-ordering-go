@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"database/sql"
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -10,14 +9,6 @@ import (
 	"github.com/peopleig/food-ordering-go/pkg/models"
 	"github.com/peopleig/food-ordering-go/pkg/utils"
 )
-
-func MenuHandler(w http.ResponseWriter, r *http.Request) {
-	user_id := r.Context().Value("user_id").(int)
-	role := r.Context().Value("role").(string)
-
-	fmt.Fprintf(w, "User ID: %d, Role: %s", user_id, role)
-	fmt.Fprintf(w, "Hello, you've reached menu!")
-}
 
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {

@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"fmt"
 	"html/template"
 	"net/http"
 )
@@ -11,6 +12,7 @@ func RenderTemplate(w http.ResponseWriter, tmplName string, data interface{}) {
 		"web/templates/"+tmplName+".html",
 	)
 	if err != nil {
+		fmt.Println(err)
 		http.Error(w, "Error parsing templates", http.StatusInternalServerError)
 		return
 	}

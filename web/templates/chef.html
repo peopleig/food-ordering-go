@@ -1,0 +1,26 @@
+{{define "content"}}
+    <h1>{{.Title}}</h1>
+    <p>No time for frontend right now. Sorry.
+        <br>To access chef's workings - 
+        <br> 1. PATCH req on /chef : By sending json data in the form 
+        <br>{ "chefId" : int, "orderId" : int, "itemId": int}
+        <br>This will assign the particular item in that order to the Chef
+        <br><br>
+        2. POST req on /chef : Sending the same json data
+        <br>Will change status to prepared - done
+    </p>
+    <h2>Chef's Portal</h2>
+    <ul>
+    {{range .Items}}
+        <li><p>{{.ItemName}} - Qty: {{.Quantity}} - OrderId: {{.OrderId}} - ItemId: {{.ItemId}}
+            <br>{{if .Assigned}}
+                Assigned to {{.ChefName}}
+            {{else}}
+                Unassigned
+            {{end}}
+        </p>
+        </li>
+    {{end}}
+    </ul>
+
+{{end}}
