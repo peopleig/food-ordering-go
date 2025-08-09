@@ -1,0 +1,20 @@
+{{define "content"}}
+    <h1>{{.Title}}</h1>
+    <p>No time for frontend right now. Sorry.
+        <br>To access admin's powers - 
+        <br> 1. GET req on /bill, to see bills
+        <br><br>
+        2. POST req on /bill/{:order_id}
+        <br>Will do payment of the bill of the order_id
+        <br>Send the json: {"tip": int, "order_id" : int}
+    </p>
+    <h2>All Bills:</h2>
+    <ul>
+    {{range .MyBill}}
+        <li><p>{{.OrderId}} - Order_ID, Status: {{.Status}} - Price ; {{.Price}}
+        </p>
+        </li>
+    {{end}}
+    </ul>
+
+{{end}}

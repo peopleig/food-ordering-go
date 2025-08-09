@@ -1,0 +1,63 @@
+package models
+
+import (
+	"fmt"
+
+	"github.com/peopleig/food-ordering-go/pkg/types"
+)
+
+func GetAllOrders(orders *[]types.Order) error {
+	query := `SELECT order_id, user_id, order_type, table_number, status FROM Orders ORDER BY order_id;`
+	rows, err := DB.Query(query)
+	if err != nil {
+		return err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var ordered types.Order
+		err := rows.Scan(&ordered.OrderId, &ordered.UserId, &ordered.Order_type, &ordered.Table_number, &ordered.Status)
+		if err != nil {
+			return err
+		}
+		*orders = append(*orders, ordered)
+	}
+
+	return rows.Err()
+}
+
+func ApproveUser(user_id int) error {
+	query := `UPDATE User SET approved = TRUE WHERE user_id = ?`
+	result, err := DB.Exec(query, user_id)
+	if err != nil {
+		return err
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return err
+	}
+	if rowsAffected == 0 {
+		return fmt.Errorf("no user found with id %d", user_id)
+	}
+
+	return nil
+}
+
+func GetUnapprovedUsers(uausers *[]types.UnApprovedUser) error {
+	query := `SELECT user_id, CONCAT(first_name, ' ', last_name) AS name, role FROM User WHERE approved = FALSE`
+	rows, err := DB.Query(query)
+	if err != nil {
+		return err
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var uauser types.UnApprovedUser
+		err := rows.Scan(&uauser.UserId, &uauser.Name, &uauser.Role)
+		if err != nil {
+			return err
+		}
+		*uausers = append(*uausers, uauser)
+	}
+	return rows.Err()
+}

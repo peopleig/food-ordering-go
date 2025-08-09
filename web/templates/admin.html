@@ -1,0 +1,42 @@
+{{define "content"}}
+    <h1>{{.Title}}</h1>
+    <p>No time for frontend right now. Sorry.
+        <br>To access admin's powers - 
+        <br> 1. GET req on /bill, to see bills
+        <br><br>
+        2. POST req on /admin/{:user_id} : Approval POST req.
+        <br>Will change status of approved to true
+    </p>
+    <h2>Admin's Portal</h2>
+    <ul>
+    <h2>All Ordered Items:</h2>
+    {{range .Items}}
+        <li><p>{{.ItemName}} - Qty: {{.Quantity}} - OrderId: {{.OrderId}} - ItemId: {{.ItemId}}
+            <br>{{if .Assigned}}
+                Assigned to {{.ChefName}}
+            {{else}}
+                Unassigned
+            {{end}}
+        </p>
+        </li>
+    {{end}}
+    </ul>
+    <h2>All Orders:</h2>
+    <ul>
+    {{range .Orders}}
+        <li><p>{{.OrderId}} - User_ID: {{.UserId}} - Status: {{.Status}} - Table Number: {{.Table_number}}
+        </p>
+        </li>
+    {{end}}
+    </ul>
+
+    <h2>All Unapproved Users:</h2>
+    <ul>
+    {{range .Uausers}}
+        <li><p>{{.UserId}} - User_ID, {{.Name}} - Name,  {{.Role}} - Role
+        </p>
+        </li>
+    {{end}}
+    </ul>
+
+{{end}}

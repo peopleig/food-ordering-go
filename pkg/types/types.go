@@ -61,3 +61,40 @@ type Ordered struct {
 	Order_type   string `json:"order_type"`
 	Assigned     bool   `json:"assigned"`
 }
+
+type AdminData struct {
+	Title   string           `json:"title"`
+	Items   []Ordered        `json:"items"`
+	Orders  []Order          `json:"orders"`
+	Uausers []UnApprovedUser `json:"uauser"`
+}
+
+type Order struct {
+	OrderId      int    `json:"order_id"`
+	UserId       int    `json:"user_id"`
+	Status       string `json:"status"`
+	Order_type   string `json:"order_status"`
+	Table_number int    `json:"table_number"`
+}
+
+type MyBills struct {
+	OrderId int    `json:"order_id"`
+	Status  string `json:"status"`
+	Price   int    `json:"price"`
+}
+
+type UnApprovedUser struct {
+	UserId int    `json:"user_id"`
+	Name   string `json:"name"`
+	Role   string `json:"role"`
+}
+
+type BillData struct {
+	Title  string    `json:"title"`
+	MyBill []MyBills `json:"all_bills"`
+}
+
+type BillPay struct {
+	Tip     int `json:"tip"`
+	OrderId int `json:"order_id"`
+}
