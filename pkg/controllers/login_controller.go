@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/peopleig/food-ordering-go/pkg/middleware"
 	"github.com/peopleig/food-ordering-go/pkg/models"
@@ -32,7 +33,10 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, message, http.StatusBadRequest)
 		}
 		if password == "" {
-			http.Error(w, "Cannot have an empty password", http.StatusBadRequest)
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte("Missing required fields"))
+			return
+			// http.Error(w, "Cannot have an empty password", http.StatusBadRequest)
 		}
 		user, errr := models.GetUserPwdatLogin(login_type, identifier)
 		if errr != nil {
@@ -60,7 +64,9 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		http.SetCookie(w, &http.Cookie{
 			Name:     "jwt_token",
 			Value:    token,
+			Expires:  time.Now().Add(24 * time.Hour),
 			HttpOnly: true,
+			Secure:   true,
 			SameSite: http.SameSiteStrictMode,
 		})
 		http.Redirect(w, r, "/menu", http.StatusSeeOther)

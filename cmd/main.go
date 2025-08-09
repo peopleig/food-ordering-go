@@ -10,7 +10,6 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/joho/godotenv"
 	"github.com/peopleig/food-ordering-go/pkg/api"
 	"github.com/peopleig/food-ordering-go/pkg/config"
 	"github.com/peopleig/food-ordering-go/pkg/models"
@@ -18,12 +17,8 @@ import (
 
 func main() {
 	fmt.Println("Hello")
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
 	config.LoadEnvVars()
-	_, err = models.InitDatabase()
+	_, err := models.InitDatabase()
 	if err != nil {
 		log.Fatalf("Failed to initialize database: %v", err)
 	}
