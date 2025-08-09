@@ -98,3 +98,9 @@ type BillPay struct {
 	Tip     int `json:"tip"`
 	OrderId int `json:"order_id"`
 }
+
+type LoginData struct {
+	LoginType  string `json:"login_type" schema:"login_type"`
+	Identifier string `json:"identifier" schema:"identifier"`
+	Password   string `json:"password" schema:"password"`
+}

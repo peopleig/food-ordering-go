@@ -6,8 +6,10 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/gorilla/schema"
 	"github.com/peopleig/food-ordering-go/pkg/middleware"
 	"github.com/peopleig/food-ordering-go/pkg/models"
+	"github.com/peopleig/food-ordering-go/pkg/types"
 	"github.com/peopleig/food-ordering-go/pkg/utils"
 )
 
@@ -25,20 +27,23 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Unable to parse form", http.StatusBadRequest)
 			return
 		}
-		login_type := r.FormValue("login_type")
-		identifier := r.FormValue("identifier")
-		password := r.FormValue("password")
-		isValid, message := utils.CheckLoginTypeValidity(login_type, identifier)
+		var decoder = schema.NewDecoder()
+		var loginData types.LoginData
+		if err := decoder.Decode(&loginData, r.PostForm); err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		isValid, message := utils.CheckLoginTypeValidity(loginData.LoginType, loginData.Identifier)
 		if !isValid {
 			http.Error(w, message, http.StatusBadRequest)
 		}
-		if password == "" {
+		if loginData.Password == "" {
 			w.WriteHeader(http.StatusBadRequest)
 			w.Write([]byte("Missing required fields"))
 			return
 			// http.Error(w, "Cannot have an empty password", http.StatusBadRequest)
 		}
-		user, errr := models.GetUserPwdatLogin(login_type, identifier)
+		user, errr := models.GetUserPwdatLogin(loginData.LoginType, loginData.Identifier)
 		if errr != nil {
 			if errr == sql.ErrNoRows {
 				http.Error(w, "User not found", http.StatusUnauthorized)
@@ -47,12 +52,12 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 
-		if !middleware.CheckPasswordHash(password, user.Hash_pwd) {
+		if !middleware.CheckPasswordHash(loginData.Password, user.Hash_pwd) {
 			http.Error(w, "Incorrect password", http.StatusUnauthorized)
 			return
 		}
 		if !user.Approved {
-			http.Error(w, "Cheeky cheeky. But you're still not approved", http.StatusUnauthorized)
+			http.Error(w, "Cheeky cheeky. But you're still not approved. Wait while the admin does it", http.StatusUnauthorized)
 		}
 		user_id, _ := strconv.Atoi(user.User_id)
 

@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gorilla/schema"
@@ -10,8 +9,6 @@ import (
 	"github.com/peopleig/food-ordering-go/pkg/types"
 	"github.com/peopleig/food-ordering-go/pkg/utils"
 )
-
-var decoder = schema.NewDecoder()
 
 func SignupHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
@@ -27,18 +24,12 @@ func SignupHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Unable to parse form", http.StatusBadRequest)
 			return
 		}
+		var decoder = schema.NewDecoder()
 		var new_user types.NewUser
 		if err := decoder.Decode(&new_user, r.PostForm); err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
-		fmt.Printf("%+v\n", new_user)
-		// new_user.Role = r.FormValue("role")
-		// new_user.First_name = r.FormValue("first_name")
-		// new_user.Last_name = r.FormValue("last_name")
-		// new_user.Email = r.FormValue("email")
-		// new_user.Mobile = r.FormValue("mobile")
-		// new_user.Password = r.FormValue("password")
 
 		if new_user.Email == "" && new_user.Mobile == "" {
 			http.Error(w, "Atleast one of mobile/email has to be entered", http.StatusBadRequest)
