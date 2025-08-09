@@ -1,0 +1,6 @@
+USE ordering_db;
+
+DROP TABLE IF EXISTS Ordered_Items;
+DROP TABLE IF EXISTS Payment;
+DROP TABLE IF EXISTS Reviews;
+DROP TABLE IF EXISTS Orders;
