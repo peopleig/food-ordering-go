@@ -9,28 +9,40 @@ import (
 	"github.com/peopleig/food-ordering-go/pkg/middleware"
 )
 
+func Run() *mux.Router {
+	router := SetupRouter()
+	PrintRoutes()
+	return router
+}
+
 func SetupRouter() *mux.Router {
 	router := mux.NewRouter()
 	staticFileDirectory := http.Dir("web/static/")
 	staticFileHandler := http.StripPrefix("/static/", http.FileServer(staticFileDirectory))
 	router.PathPrefix("/static/").Handler(staticFileHandler).Methods("GET")
 
-	// userController := controllers.NewUserController()
-
 	router.HandleFunc("/", controllers.HomeHandler).Methods("GET")
 	router.HandleFunc("/login", controllers.LoginHandler).Methods("GET", "POST")
 	router.HandleFunc("/signup", controllers.SignupHandler).Methods("GET", "POST")
-	router.Handle("/menu", middleware.JWTMiddleware(http.HandlerFunc(controllers.MenuHandler))).Methods("GET", "POST")
-	router.Handle("/chef", middleware.JWTMiddleware(middleware.AllowChefAccess(http.HandlerFunc(controllers.ChefHandler)))).Methods("GET", "PATCH", "POST")
-	router.Handle("/admin", middleware.JWTMiddleware(middleware.AllowAdminAccess(http.HandlerFunc(controllers.AdminHandler)))).Methods("GET")
-	router.Handle("/admin/{user_id}", middleware.JWTMiddleware(middleware.AllowAdminAccess(http.HandlerFunc(controllers.AdminApproveHandler)))).Methods("PATCH")
-	router.Handle("/bill", middleware.JWTMiddleware(middleware.AllowAdminandIdAccess(http.HandlerFunc(controllers.BillHandler)))).Methods("GET")
-	router.Handle("/bill", middleware.JWTMiddleware(middleware.AllowAdminAccess(http.HandlerFunc(controllers.BillPayerHandler)))).Methods("POST")
-	// router.HandleFunc("/users", userController.GetUsers).Methods("GET")
-	// router.HandleFunc("/users/{id}", userController.GetUser).Methods("GET")
-	// router.HandleFunc("/users/add", userController.CreateUser).Methods("POST")
-	// router.HandleFunc("/users/update/{id}", userController.UpdateUser).Methods("PUT")
-	// router.HandleFunc("/users/delete/{id}", userController.DeleteUser).Methods("DELETE")
+
+	protected := router.PathPrefix("/").Subrouter()
+	protected.Use(middleware.JWTMiddleware)
+
+	protected.HandleFunc("/menu", controllers.MenuHandler).Methods("GET", "POST")
+
+	chefRouter := protected.PathPrefix("/chef").Subrouter()
+	chefRouter.Use(middleware.AllowChefAccess)
+	chefRouter.HandleFunc("", controllers.ChefHandler).Methods("GET", "PATCH", "POST")
+
+	adminRouter := protected.PathPrefix("/admin").Subrouter()
+	adminRouter.Use(middleware.AllowAdminAccess)
+	adminRouter.HandleFunc("", controllers.AdminHandler).Methods("GET")
+	adminRouter.HandleFunc("/{user_id}", controllers.AdminApproveHandler).Methods("PATCH")
+
+	billRouter := protected.PathPrefix("/bill").Subrouter()
+	billRouter.Use(middleware.AllowAdminandIdAccess)
+	billRouter.HandleFunc("", controllers.BillHandler).Methods("GET")
+	billRouter.HandleFunc("", controllers.BillPayerHandler).Methods("POST")
 
 	return router
 }

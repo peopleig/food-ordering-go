@@ -1,12 +1,12 @@
 package types
 
 type NewUser struct {
-	Role       string `json:"role"`
-	First_name string `json:"first_name"`
-	Last_name  string `json:"last_name"`
-	Email      string `json:"email"`
-	Mobile     string `json:"mobile"`
-	Password   string `json:"password"`
+	Role       string `json:"role" schema:"role"`
+	First_name string `json:"first_name" schema:"first_name"`
+	Last_name  string `json:"last_name" schema:"last_name"`
+	Email      string `json:"email" schema:"email"`
+	Mobile     string `json:"mobile" schema:"mobile"`
+	Password   string `json:"password" schema:"password"`
 }
 
 type Item struct {

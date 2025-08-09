@@ -22,8 +22,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed to initialize database: %v", err)
 	}
-	router := api.SetupRouter()
-	api.PrintRoutes()
+	router := api.Run()
 	server := &http.Server{
 		Addr:    ":8001",
 		Handler: router,
