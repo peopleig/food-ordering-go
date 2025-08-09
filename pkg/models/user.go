@@ -77,6 +77,5 @@ func CreateNewUser(new_user *types.NewUser) (bool, string, int64, error) {
 	if err != nil {
 		return false, "Error in accessing database", 0, err
 	}
-	query = `SELECT user_id FROM User WHERE`
 	return true, "", user_id, nil
 }
