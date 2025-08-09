@@ -25,6 +25,7 @@ func SetupRouter() *mux.Router {
 	router.Handle("/admin", middleware.JWTMiddleware(middleware.AllowAdminAccess(http.HandlerFunc(controllers.AdminHandler)))).Methods("GET")
 	router.Handle("/admin/{user_id}", middleware.JWTMiddleware(middleware.AllowAdminAccess(http.HandlerFunc(controllers.AdminApproveHandler)))).Methods("PATCH")
 	router.Handle("/bill", middleware.JWTMiddleware(middleware.AllowAdminandIdAccess(http.HandlerFunc(controllers.BillHandler)))).Methods("GET")
+	router.Handle("/bill", middleware.JWTMiddleware(middleware.AllowAdminAccess(http.HandlerFunc(controllers.BillPayerHandler)))).Methods("POST")
 	// router.HandleFunc("/users", userController.GetUsers).Methods("GET")
 	// router.HandleFunc("/users/{id}", userController.GetUser).Methods("GET")
 	// router.HandleFunc("/users/add", userController.CreateUser).Methods("POST")
@@ -36,11 +37,4 @@ func SetupRouter() *mux.Router {
 
 func PrintRoutes() {
 	fmt.Println("Server listening on http://localhost:8001")
-	fmt.Println("Available endpoints:")
-	fmt.Println("  GET  /")
-	fmt.Println("  GET  /users")
-	fmt.Println("  GET  /users/{id}")
-	fmt.Println("  POST /users/add")
-	fmt.Println("  PUT  /users/update/{id}")
-	fmt.Println("  DELETE /users/delete/{id}")
 }
