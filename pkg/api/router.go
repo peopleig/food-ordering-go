@@ -2,11 +2,11 @@ package api
 
 import (
 	"fmt"
-	"net/http"
 
 	"github.com/gorilla/mux"
 	"github.com/peopleig/food-ordering-go/pkg/controllers"
 	"github.com/peopleig/food-ordering-go/pkg/middleware"
+	"github.com/peopleig/food-ordering-go/pkg/utils"
 )
 
 func Run() *mux.Router {
@@ -17,9 +17,7 @@ func Run() *mux.Router {
 
 func SetupRouter() *mux.Router {
 	router := mux.NewRouter()
-	staticFileDirectory := http.Dir("web/static/")
-	staticFileHandler := http.StripPrefix("/static/", http.FileServer(staticFileDirectory))
-	router.PathPrefix("/static/").Handler(staticFileHandler).Methods("GET")
+	utils.DefinePath(router)
 
 	router.HandleFunc("/", controllers.HomeHandler).Methods("GET")
 	router.HandleFunc("/login", controllers.LoginHandler).Methods("GET", "POST")

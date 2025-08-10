@@ -2,7 +2,6 @@ package models
 
 import (
 	"fmt"
-	"strconv"
 	"strings"
 
 	"github.com/peopleig/food-ordering-go/pkg/types"
@@ -27,14 +26,7 @@ func GetAllItems(items *[]types.Item) error {
 	return rows.Err()
 }
 
-func CreateNewOrder(order *types.OrderRequest, user_id int) error {
-	table_number, _ := strconv.Atoi(order.Table_number)
-	if order.Order_type != "dine_in" && order.Order_type != "takeaway" {
-		return fmt.Errorf("incorrect order_type")
-	}
-	if order.Order_type == "takeaway" {
-		table_number = 0
-	}
+func CreateNewOrder(order *types.OrderRequest, table_number int, user_id int) error {
 	total, _ := utils.CalculateTotal(order.Cart)
 	query := `INSERT INTO Orders (user_id, instructions, order_type, table_number, status, total_cost) VALUES (?, ?, ?, ?, 'preparing', ?)`
 	res, err := DB.Exec(query, user_id, order.Special_instructions, order.Order_type, table_number, total)
@@ -54,6 +46,7 @@ func CreateNewOrder(order *types.OrderRequest, user_id int) error {
 	}
 
 	query = fmt.Sprintf(`INSERT INTO Ordered_Items (order_id, item_id, quantity) VALUES %s`, strings.Join(placeholders, ","))
+	fmt.Println(query)
 	_, err = DB.Exec(query, values...)
 	if err != nil {
 		return err

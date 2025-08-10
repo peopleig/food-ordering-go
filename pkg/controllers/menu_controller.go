@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/peopleig/food-ordering-go/pkg/models"
 	"github.com/peopleig/food-ordering-go/pkg/types"
@@ -37,8 +38,19 @@ func MenuHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Incorrect Cart data sent", http.StatusBadRequest)
 			return
 		}
+		if order.Order_type != "dine_in" && order.Order_type != "takeaway" {
+			http.Error(w, "Incorrect order type", http.StatusBadRequest)
+			return
+		}
+		table_number, err := strconv.Atoi(order.Table_number)
+		if err != nil {
+			http.Error(w, "Error in parsing table number data", http.StatusInternalServerError)
+		}
+		if order.Order_type == "takeaway" {
+			table_number = 0
+		}
 		fmt.Printf("Got order: %+v\n", order)
-		err = models.CreateNewOrder(&order, user_id)
+		err = models.CreateNewOrder(&order, table_number, user_id)
 		if err != nil {
 			fmt.Println(err)
 			http.Error(w, "Error in Creating Order", http.StatusInternalServerError)
