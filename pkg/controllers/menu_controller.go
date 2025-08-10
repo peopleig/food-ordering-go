@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/peopleig/food-ordering-go/pkg/cache"
 	"github.com/peopleig/food-ordering-go/pkg/models"
 	"github.com/peopleig/food-ordering-go/pkg/types"
 	"github.com/peopleig/food-ordering-go/pkg/utils"
@@ -16,8 +17,7 @@ func MenuHandler(w http.ResponseWriter, r *http.Request) {
 	role := r.Context().Value("role").(string)
 	switch r.Method {
 	case http.MethodGet:
-		var items []types.Item
-		err := models.GetAllItems(&items)
+		err := cache.LoadMenu()
 		if err != nil {
 			fmt.Println(err)
 			http.Error(w, "Unable to access the menu", http.StatusInternalServerError)
@@ -25,7 +25,7 @@ func MenuHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		data := types.MenuData{
 			Title: "Menu",
-			Items: items,
+			Items: cache.MenuCache,
 		}
 		fmt.Println(user_id, role)
 		utils.RenderTemplate(w, "menu", data)
@@ -50,6 +50,7 @@ func MenuHandler(w http.ResponseWriter, r *http.Request) {
 			table_number = 0
 		}
 		fmt.Printf("Got order: %+v\n", order)
+
 		err = models.CreateNewOrder(&order, table_number, user_id)
 		if err != nil {
 			fmt.Println(err)
