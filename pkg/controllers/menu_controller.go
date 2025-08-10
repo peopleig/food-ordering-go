@@ -51,7 +51,7 @@ func MenuHandler(w http.ResponseWriter, r *http.Request) {
 			table_number = 0
 		}
 		fmt.Printf("Got order: %+v\n", order)
-
+		cache.LoadMenu()
 		err = models.CreateNewOrder(&order, table_number, user_id)
 		if err != nil {
 			fmt.Println(err)
