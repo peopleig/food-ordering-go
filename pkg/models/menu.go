@@ -8,7 +8,7 @@ import (
 	"github.com/peopleig/food-ordering-go/pkg/utils"
 )
 
-func GetAllItems() ([]types.Item, error) {
+func GetAllItems() (map[int]types.Item, error) {
 	query := `SELECT i.item_id, i.item_name, i.price, i.description, i.item_image_url, i.is_veg, i.spice_level, c.category_name
 	FROM Items i JOIN Categories c ON i.category_id = c.category_id;`
 	rows, err := DB.Query(query)
@@ -16,13 +16,13 @@ func GetAllItems() ([]types.Item, error) {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []types.Item
+	items := make(map[int]types.Item)
 	for rows.Next() {
 		var i types.Item
 		if err := rows.Scan(&i.Item_id, &i.Item_name, &i.Price, &i.Description, &i.Item_img, &i.Is_veg, &i.Spice_level, &i.Category_name); err != nil {
 			return nil, err
 		}
-		items = append(items, i)
+		items[i.Item_id] = i
 	}
 	return items, rows.Err()
 }
@@ -50,7 +50,10 @@ func CreateNewOrder(order *types.OrderRequest, table_number int, user_id int) er
 	fmt.Println(query)
 	_, err = DB.Exec(query, values...)
 	if err != nil {
+		_, err = DB.Exec(`DELETE FROM Orders WHERE order_id = ?`, order_id)
 		return err
 	}
 	return nil
 }
+
+//Help: In CreateNewOrder

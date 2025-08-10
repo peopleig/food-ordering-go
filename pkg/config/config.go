@@ -6,7 +6,11 @@ import (
 	"strconv"
 
 	"github.com/joho/godotenv"
+	"github.com/peopleig/food-ordering-go/pkg/types"
 )
+
+var MenuCache = make(map[int]types.Item)
+var MenuCacheLoaded bool
 
 type DBConfig struct {
 	User     string

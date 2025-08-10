@@ -7,6 +7,7 @@ import (
 	"strconv"
 
 	"github.com/peopleig/food-ordering-go/pkg/cache"
+	"github.com/peopleig/food-ordering-go/pkg/config"
 	"github.com/peopleig/food-ordering-go/pkg/models"
 	"github.com/peopleig/food-ordering-go/pkg/types"
 	"github.com/peopleig/food-ordering-go/pkg/utils"
@@ -25,7 +26,7 @@ func MenuHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		data := types.MenuData{
 			Title: "Menu",
-			Items: cache.MenuCache,
+			Items: config.MenuCache,
 		}
 		fmt.Println(user_id, role)
 		utils.RenderTemplate(w, "menu", data)

@@ -22,7 +22,7 @@ type Item struct {
 
 type MenuData struct {
 	Title string
-	Items []Item
+	Items map[int]Item
 }
 
 type OrderRequest struct {
