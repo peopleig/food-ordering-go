@@ -104,3 +104,12 @@ type LoginData struct {
 	Identifier string `json:"identifier" schema:"identifier"`
 	Password   string `json:"password" schema:"password"`
 }
+
+type NewDish struct {
+	DishName    string `schema:"dish_name"`
+	Category    string `schema:"category"`
+	Price       string `schema:"price"`
+	Description string `schema:"description"`
+	IsVeg       string `schema:"is_veg"`
+	SpiceLevel  string `schema:"spice_level"`
+}

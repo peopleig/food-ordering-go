@@ -2,10 +2,17 @@ package controllers
 
 import (
 	"fmt"
+	"io"
 	"net/http"
+	"os"
+	"path/filepath"
 	"strconv"
+	"strings"
+	"time"
 
 	"github.com/gorilla/mux"
+	"github.com/gorilla/schema"
+	"github.com/peopleig/food-ordering-go/pkg/cache"
 	"github.com/peopleig/food-ordering-go/pkg/models"
 	"github.com/peopleig/food-ordering-go/pkg/types"
 	"github.com/peopleig/food-ordering-go/pkg/utils"
@@ -55,4 +62,71 @@ func AdminApproveHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	http.Redirect(w, r, "/admin", http.StatusSeeOther)
+}
+
+var decoder = schema.NewDecoder()
+
+func AdminDishHandler(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case http.MethodPost:
+		r.ParseMultipartForm(10 << 20)
+		file, header, err := r.FormFile("image")
+		if err != nil {
+			http.Error(w, "Error retrieving the file", http.StatusBadRequest)
+			return
+		}
+		defer file.Close()
+		ext := strings.ToLower(filepath.Ext(header.Filename))
+		if ext != ".jpg" && ext != ".png" && ext != ".webp" {
+			http.Error(w, "Invalid image file. Only PNG/JPG/WEBP allowed", http.StatusBadRequest)
+			return
+		}
+
+		milli := strconv.FormatInt(time.Now().UnixMilli(), 10)
+		gen_name := milli + header.Filename
+		url := "static/images/" + gen_name
+		dest, err := os.Create("./web/static/images/" + gen_name)
+		if err != nil {
+			fmt.Println(err)
+			http.Error(w, "Unable to create file", http.StatusInternalServerError)
+			return
+		}
+		defer dest.Close()
+		_, err = io.Copy(dest, file)
+		if err != nil {
+			http.Error(w, "Unable to save file", http.StatusInternalServerError)
+			return
+		}
+		var newDish types.NewDish
+		if err := decoder.Decode(&newDish, r.PostForm); err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		var isVeg bool
+		switch newDish.IsVeg {
+		case "1":
+			isVeg = true
+		case "0":
+			isVeg = false
+		default:
+			http.Error(w, "Incorrect form data", http.StatusBadRequest)
+			return
+		}
+		dishExists := utils.DishExists(newDish.DishName)
+		if dishExists {
+			http.Error(w, "dish with such a name already exists", http.StatusBadRequest)
+			return
+		}
+		price64, _ := strconv.ParseFloat(newDish.Price, 32)
+		price32 := float32(price64)
+		spiceLevel, _ := strconv.Atoi(newDish.SpiceLevel)
+		err = models.AddDish(newDish, price32, isVeg, url, spiceLevel)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		cache.RefreshMenuCache()
+		_ = cache.LoadMenu()
+		http.Redirect(w, r, "/admin", http.StatusSeeOther)
+	}
 }

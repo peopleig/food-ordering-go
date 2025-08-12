@@ -18,7 +18,6 @@ func Run() *mux.Router {
 func SetupRouter() *mux.Router {
 	router := mux.NewRouter()
 	utils.DefinePath(router)
-
 	router.HandleFunc("/", controllers.HomeHandler).Methods("GET")
 	router.HandleFunc("/login", controllers.LoginHandler).Methods("GET", "POST")
 	router.HandleFunc("/signup", controllers.SignupHandler).Methods("GET", "POST")
@@ -36,6 +35,8 @@ func SetupRouter() *mux.Router {
 	adminRouter.Use(middleware.AllowAdminAccess)
 	adminRouter.HandleFunc("", controllers.AdminHandler).Methods("GET")
 	adminRouter.HandleFunc("/{user_id}", controllers.AdminApproveHandler).Methods("PATCH")
+	adminRouter.HandleFunc("/dish", controllers.AdminDishHandler).Methods("POST")
+	// adminRouter.HandleFunc("/category", controllers.AdminCategoryHandler).Methods("POST", "DELETE")
 
 	billRouter := protected.PathPrefix("/bill").Subrouter()
 	billRouter.Use(middleware.AllowAdminandIdAccess)

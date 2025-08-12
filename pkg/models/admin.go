@@ -1,6 +1,7 @@
 package models
 
 import (
+	"database/sql"
 	"fmt"
 
 	"github.com/peopleig/food-ordering-go/pkg/types"
@@ -60,4 +61,25 @@ func GetUnapprovedUsers(uausers *[]types.UnApprovedUser) error {
 		*uausers = append(*uausers, uauser)
 	}
 	return rows.Err()
+}
+
+func AddDish(newDish types.NewDish, price float32, isVeg bool, url string, spiceLevel int) error {
+	var categoryID int
+	query := `SELECT category_id FROM Categories WHERE category_name = ?`
+	err := DB.QueryRow(query, newDish.Category).Scan(&categoryID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			fmt.Println("Category not found")
+			return err
+		} else {
+			return err
+		}
+	}
+	query = `INSERT INTO Items(item_name, category_id, price, description, item_image_url, is_veg, spice_level) 
+	VALUES (?,?,?,?,?,?,?)`
+	_, err = DB.Exec(query, newDish.DishName, categoryID, price, newDish.Description, url, isVeg, spiceLevel)
+	if err != nil {
+		return err
+	}
+	return nil
 }

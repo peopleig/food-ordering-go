@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/peopleig/food-ordering-go/pkg/api"
+	"github.com/peopleig/food-ordering-go/pkg/cache"
 	"github.com/peopleig/food-ordering-go/pkg/config"
 	"github.com/peopleig/food-ordering-go/pkg/models"
 )
@@ -21,6 +22,10 @@ func main() {
 	_, err := models.InitDatabase()
 	if err != nil {
 		log.Fatalf("Failed to initialize database: %v", err)
+	}
+	err = cache.LoadMenu()
+	if err != nil {
+		fmt.Println("It will load later, then!")
 	}
 	router := api.Run()
 	server := &http.Server{
