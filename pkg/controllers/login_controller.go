@@ -41,7 +41,6 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusBadRequest)
 			w.Write([]byte("Missing required fields"))
 			return
-			// http.Error(w, "Cannot have an empty password", http.StatusBadRequest)
 		}
 		user, errr := models.GetUserPwdatLogin(loginData.LoginType, loginData.Identifier)
 		if errr != nil {
@@ -70,19 +69,18 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 			Name:     "jwt_token",
 			Value:    token,
 			Expires:  time.Now().Add(24 * time.Hour),
+			Path:     "/",
 			HttpOnly: true,
 			Secure:   true,
 			SameSite: http.SameSiteStrictMode,
 		})
-		http.Redirect(w, r, "/menu", http.StatusSeeOther)
-		// switch user.Role {
-		// case "admin":
-		// 	http.Redirect(w, r, "/admin", http.StatusSeeOther)
-		// case "chef":
-		// 	http.Redirect(w, r, "/chef", http.StatusSeeOther)
-		// case "customer":
-		// 	http.Redirect(w, r, "/menu", http.StatusSeeOther)
-		// }
-
+		switch user.Role {
+		case "admin":
+			http.Redirect(w, r, "/admin", http.StatusSeeOther)
+		case "chef":
+			http.Redirect(w, r, "/chef", http.StatusSeeOther)
+		case "customer":
+			http.Redirect(w, r, "/menu", http.StatusSeeOther)
+		}
 	}
 }
