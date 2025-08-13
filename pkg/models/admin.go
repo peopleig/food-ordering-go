@@ -63,6 +63,24 @@ func GetUnapprovedUsers(uausers *[]types.UnApprovedUser) error {
 	return rows.Err()
 }
 
+func GetAllCategories(categories *[]types.Categories) error {
+	query := `SELECT * FROM Categories`
+	rows, err := DB.Query(query)
+	if err != nil {
+		return err
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var category types.Categories
+		err := rows.Scan(&category.CategoryId, &category.CategoryName)
+		if err != nil {
+			return err
+		}
+		*categories = append(*categories, category)
+	}
+	return rows.Err()
+}
+
 func AddDish(newDish types.NewDish, price float32, isVeg bool, url string, spiceLevel int) error {
 	var categoryID int
 	query := `SELECT category_id FROM Categories WHERE category_name = ?`

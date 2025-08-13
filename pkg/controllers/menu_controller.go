@@ -24,8 +24,15 @@ func MenuHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Unable to access the menu", http.StatusInternalServerError)
 			return
 		}
+		var myBills []types.MyBills
+		err = models.GetBills(user_id, &myBills)
+		if err != nil {
+			http.Error(w, "error finding your bills", http.StatusInternalServerError)
+			return
+		}
 		data := types.MenuData{
 			Title: "Menu",
+			Bills: myBills,
 			Items: config.MenuCache,
 		}
 		fmt.Println(user_id, role)

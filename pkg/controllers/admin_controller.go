@@ -61,13 +61,26 @@ func AdminApproveHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	http.Redirect(w, r, "/admin", http.StatusSeeOther)
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
 }
 
 var decoder = schema.NewDecoder()
 
 func AdminDishHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
+	case http.MethodGet:
+		var categories []types.Categories
+		err := models.GetAllCategories(&categories)
+		if err != nil {
+			http.Error(w, "unable to fetch all categories", http.StatusInternalServerError)
+			return
+		}
+		data := types.GetAddDishData{
+			Title:      "Add Dish",
+			Categories: categories,
+		}
+		utils.RenderTemplate(w, "add_dish", data)
 	case http.MethodPost:
 		r.ParseMultipartForm(10 << 20)
 		file, header, err := r.FormFile("image")

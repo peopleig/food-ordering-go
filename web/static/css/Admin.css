@@ -1,0 +1,4 @@
+.order_table , .approval_table, .item_table{
+    max-height: 400px;
+    overflow: scroll;
+}

@@ -1,0 +1,14 @@
+{{define "insert"}}
+    <div class="text-end mt-3">
+        <p><b>Total:</b> ₹<p id="initial">{{.Order.TotalCost}}</p></p>
+    </div>
+    <form class="mb-3">
+        <label for="tip_input" class="form-label">Add a Tip (optional):</label>
+        <input type="number" class="form-control" id="tip_input" min="0" placeholder="Enter amount in ₹">
+    </form>
+    <p>Right now, we only accept cash payments</p>
+    <div class="text-end mb-4">
+        <p><b>Final Total:</b> ₹<span id="final_total">{{.Order.TotalCost}}</span></p>
+    </div>
+    <button id="pay_btn" class="btn btn-success mb-3">Proceed to Pay</button>
+{{end}}

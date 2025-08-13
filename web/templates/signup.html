@@ -1,8 +1,9 @@
 {{define "content"}}
+<div id="cover">
     <form action="/signup" method="POST" class="container mt-5" style="max-width: 400px;" id="signup_form">
-        <h3 class="text-center mb-4"><b>SIGNUP</b></h3>
-        <div class="mb-3">
-            <label class="form-label d-block">Role:</label>
+    <h3 class="text-center mb-4"><b>SIGNUP</b></h3>
+    <div class="mb-3">
+        <label class="form-label d-block">Role:</label>
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="role" id="customer_op" value="customer" checked>
                 <label class="form-check-label" for="customer_op">Customer</label>
@@ -16,27 +17,27 @@
                 <label class="form-check-label" for="admin_op">Admin</label>
             </div>
         </div>
-        <div class="mb-3">
+        <div class="mb-4">
             <label for="first_name" class="form-label">First Name</label>
             <input type="text" class="form-control" id="first_name" name="first_name" required>
         </div>
-        <div class="mb-3">
+        <div class="mb-4">
             <label for="last_name" class="form-label">Last Name</label>
             <input type="text" class="form-control" id="last_name" name="last_name" required>
         </div>
-        <div class="mb-3">
+        <div class="mb-4">
             <label for="email" class="form-label">Email Id</label>
             <input type="text" class="form-control" id="email" name="email">
         </div>
-        <div class="mb-3">
+        <div class="mb-4">
             <label for="mobile" class="form-label">Mobile Number</label>
             <input type="tel" class="form-control" id="mobile" name="mobile" pattern="^\d{10}$">
         </div>
-        <div class="mb-3">
+        <div class="mb-4">
             <label for="password" class="form-label">Password</label>
             <input type="password" class="form-control" id="password" name="password" required>
         </div>
-        <div class="form-check mb-3">
+        <div class="form-check mb-4">
             <input type="checkbox" class="form-check-input" id="show_password">
             <label class="form-check-label" for="show_password">Show Password</label>
         </div>
@@ -44,5 +45,6 @@
             <button type="submit" class="btn btn-primary">Sign Up</button>
         </div>
     </form>
-
-{{end}}
+    
+</div>
+    {{end}}

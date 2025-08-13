@@ -11,6 +11,7 @@ import (
 )
 
 func ChefHandler(w http.ResponseWriter, r *http.Request) {
+	user_id := r.Context().Value("user_id").(int)
 	switch r.Method {
 	case http.MethodGet:
 		var items []types.Ordered
@@ -21,14 +22,16 @@ func ChefHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		data := types.OrdersData{
-			Title: "Chef",
-			Items: items,
+			Title:  "Chef",
+			Items:  items,
+			UserId: user_id,
 		}
 		utils.RenderTemplate(w, "chef", data)
 	case http.MethodPatch:
 		var assign types.ChefAssignRequest
 
 		err := json.NewDecoder(r.Body).Decode(&assign)
+		fmt.Println(r.Body)
 		if err != nil {
 			http.Error(w, "Invalid JSON", http.StatusBadRequest)
 			return
@@ -42,7 +45,8 @@ func ChefHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		http.Redirect(w, r, "/chef", http.StatusSeeOther)
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(map[string]string{"status": "success"})
 
 	case http.MethodPost:
 		var done types.ChefAssignRequest
@@ -57,7 +61,18 @@ func ChefHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Invalid JSON", http.StatusBadRequest)
 			return
 		}
-		http.Redirect(w, r, "/chef", http.StatusSeeOther)
-
+		toUpdate, err := models.CheckCompletion(done.OrderID)
+		if err != nil {
+			fmt.Println(err)
+		}
+		if toUpdate {
+			err := models.UpdateOrderStatus(done.OrderID)
+			if err != nil {
+				fmt.Println(err)
+				http.Error(w, "failed to update order status", http.StatusInternalServerError)
+			}
+		}
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(map[string]string{"status": "success"})
 	}
 }

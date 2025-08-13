@@ -1,0 +1,12 @@
+{{define "insert"}}
+    <div class="text-end mt-3">
+        <p><b>Total:</b> ₹{{.Order.TotalCost}}</p>
+    </div>
+    <p id="initial" hidden>{{.Order.TotalCost}}</p>
+    <p>Your Food is being prepared!
+        <br>Our Chefs are hard at work
+    </p>
+    <div class="text-end mb-4">
+        <p><b>Final Total:</b> ₹<span id="final_total">{{.Order.TotalCost}}</span></p>
+    </div>
+{{end}}

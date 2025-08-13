@@ -1,21 +1,55 @@
 {{define "content"}}
-    <h1>{{.Title}}</h1>
-    <input type="text" id="specialInstructions" placeholder="Special Instructions" />
-    <select id="orderType">
-        <option value="dine_in">Dine-In</option>
-        <option value="takeaway">Takeaway</option>
-    </select>
-    <input type="number" id="tableNo" placeholder="Table No." />
-    <button onclick="placeOrder()">Place Order</button>
+<div class="container">
+    <div class="container">
+        <h4>Your Orders</h4>
+        <div class="d-flex gap-1 mb-3">
+            <button class="btn btn-outline-primary order-filter active" data-status="preparing">Preparing</button>
+            <button class="btn btn-outline-warning order-filter" data-status="payment_pending">Payment Pending</button>
+            <button class="btn btn-outline-success order-filter" data-status="completed">Completed</button>
+        </div>
+        <div class="overflow-auto">
+            {{range .Bills}}
+                <div class="orders-card card d-inline-block me-3 p-3 mb-3 mt-3" data-status="{{.Status}}">
+                    <h5 class="mb-2">#{{.OrderId}}</h5>
+                    <p class="mb-2">₹{{.Price}}</p>
+                    <a href="/bill/{{.Status}}/{{.OrderId}}" class="btn btn-sm btn-primary" target="_blank">View Bill</a>
+                </div>
+            {{end}}
+        </div>
+    </div>
+    <div class="order-options">
+        <input type="text" id="specialInstructions" placeholder="Special Instructions" />
+        <select id="orderType">
+            <option value="dine_in">Dine-In</option>
+            <option value="takeaway">Takeaway</option>
+        </select>
+        <input type="number" id="tableNo" placeholder="Table No." />
+        <button onclick="placeOrder()">Place Order</button>
+    </div>
+
     <h2>Cart</h2>
     <ul id="cart-list"></ul>
-    <h2>Menu</h2>
-    <ul>
-    {{range .Items}}
-        <li>{{.Item_name}} - {{.Price}} - <img src="{{.Item_img}}" style="max-height: 5rem;">
-            <button onclick="addToCart('{{.Item_id}}', '{{.Item_name}}', '{{.Price}}')" class="add-buttons">Add to Cart</button>
-        </li>
-    {{end}}
-    </ul>
 
+    <h2>Menu</h2>
+    <div class="menu-grid">
+        {{range .Items}}
+            <div class="card">
+                <img src="{{.Item_img}}">
+                <div class="card-body">
+                    <h5 class="card-title">{{.Item_name}}</h5>
+                    <p class="card-text">{{.Description}}</p>
+                    <p class="card-text fw-bold">₹{{.Price}}</p>
+                    {{if .Is_veg}}
+                        <span class="badge bg-success">Veg</span>
+                    {{else}}
+                        <span class="badge bg-warning text-dark">Non-Veg</span>
+                    {{end}}
+                </div>
+                <div class="card-footer">
+                    <button class="btn btn-primary add-buttons"  data-item-id="{{.Item_id}}" onclick="addToCart('{{.Item_id}}', '{{.Item_name}}', '{{.Price}}', this)">Add to Cart</button>
+                </div>
+            </div>
+        {{end}}
+    </div>
+</div>
 {{end}}

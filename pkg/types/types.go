@@ -22,7 +22,13 @@ type Item struct {
 
 type MenuData struct {
 	Title string
+	Bills []MyBills
 	Items map[int]Item
+}
+
+type GroupedData struct {
+	Title        string
+	GroupedItems map[string][]Item
 }
 
 type OrderRequest struct {
@@ -39,6 +45,16 @@ type CartItem struct {
 	Price     int    `json:"price"`
 }
 
+type Categories struct {
+	CategoryId   int    `json:"category_id"`
+	CategoryName string `json:"category_name"`
+}
+
+type GetAddDishData struct {
+	Title      string       `json:"title"`
+	Categories []Categories `json:"categories"`
+}
+
 type ChefAssignRequest struct {
 	ChefID  int `json:"chefId"`
 	OrderID int `json:"orderId"`
@@ -46,8 +62,9 @@ type ChefAssignRequest struct {
 }
 
 type OrdersData struct {
-	Title string    `json:"title"`
-	Items []Ordered `json:"items"`
+	Title  string    `json:"title"`
+	Items  []Ordered `json:"items"`
+	UserId int       `json:"user_id"`
 }
 
 type Ordered struct {
@@ -75,6 +92,48 @@ type Order struct {
 	Status       string `json:"status"`
 	Order_type   string `json:"order_status"`
 	Table_number int    `json:"table_number"`
+}
+
+type BillOrder struct {
+	OrderId      int     `json:"order_id"`
+	UserId       int     `json:"user_id"`
+	UserName     string  `json:"name"`
+	Status       string  `json:"status"`
+	OrderType    string  `json:"order_type"`
+	TableNumber  int     `json:"table_number"`
+	Instructions string  `json:"instructions"`
+	TotalCost    float32 `json:"total_cost"`
+}
+
+type CompleteBill struct {
+	OrderId      int     `json:"order_id"`
+	UserId       int     `json:"user_id"`
+	UserName     string  `json:"name"`
+	Status       string  `json:"status"`
+	OrderType    string  `json:"order_type"`
+	TableNumber  int     `json:"table_number"`
+	Instructions string  `json:"instructions"`
+	TotalCost    float32 `json:"total_cost"`
+	AmtPaid      float32 `json:"amt_paid"`
+	TipPaid      float32 `json:"tip_paid"`
+}
+
+type OrderContents struct {
+	ItemName string  `json:"item_name"`
+	Price    float32 `json:"price"`
+	Quantity int     `json:"quantity"`
+}
+
+type FinalBill struct {
+	Title    string          `json:"title"`
+	Contents []OrderContents `json:"contents"`
+	Order    CompleteBill    `json:"order"`
+}
+
+type SingleBill struct {
+	Title    string          `json:"title"`
+	Order    BillOrder       `json:"order"`
+	Contents []OrderContents `json:"contents"`
 }
 
 type MyBills struct {
