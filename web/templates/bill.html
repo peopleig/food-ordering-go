@@ -1,20 +1,47 @@
 {{define "content"}}
-    <h1>{{.Title}}</h1>
-    <p>No time for frontend right now. Sorry.
-        <br>To access admin's powers - 
-        <br> 1. GET req on /bill, to see bills
-        <br><br>
-        2. POST req on /bill/{:order_id}
-        <br>Will do payment of the bill of the order_id
-        <br>Send the json: {"tip": int, "order_id" : int}
-    </p>
-    <h2>All Bills:</h2>
-    <ul>
-    {{range .MyBill}}
-        <li><p>{{.OrderId}} - Order_ID, Status: {{.Status}} - Price ; {{.Price}}
-        </p>
-        </li>
-    {{end}}
-    </ul>
+<div class="container my-5 py-5">
+    <div class="bg-white p-4 rounded shadow-sm" style="max-width: 700px; margin: auto;">
+        <h4 class="text-center mb-3">Order ID: {{.Order.OrderId}}</h4>
+        <p id="order_id" hidden>{{.Order.OrderId}}</p>
+        <p><b>Name:</b> {{.Order.UserName}}</p>
+        <p><b>Instructions: </b>{{.Order.Instructions}}</p>
+        <h5 class="mt-4 mb-2">Ordered Items:</h5>
+        <table class="table table-bordered text-center align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Item</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Cost</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{range .Contents}}
+                    <tr>
+                        <td>{{.ItemName}}</td>
+                        <td>{{.Price}}</td>
+                        <td>{{.Quantity}}</td>
+                        <td>₹{{.Price}}</td>
+                    </tr>
+                {{end}}
+            </tbody>
+        </table>
+        {{ block "insert" . }}{{ end }}
+        
+        <div class="d-flex justify-content-between">
+            <form action="/menu" method="GET">
+                <button class="btn btn-outline-secondary" type="submit">Back to Menu</button>
+            </form>
 
+            <form action="/admin" method="GET">
+                <button class="btn btn-outline-success" type="submit"><i class="fa-solid fa-user-tie" title="Admin Page"></i></button>
+            </form>
+
+                <!-- <form action="/chef" method="GET">
+                    <button class="btn btn-outline-success" type="submit"><i class="fa-solid fa-utensils" title="Chef Page"></i></button>
+                </form> -->
+
+        </div>
+    </div>
+</div>
 {{end}}

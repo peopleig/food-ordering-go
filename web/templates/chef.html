@@ -1,26 +1,71 @@
 {{define "content"}}
-    <h1>{{.Title}}</h1>
-    <p>No time for frontend right now. Sorry.
-        <br>To access chef's workings - 
-        <br> 1. PATCH req on /chef : By sending json data in the form 
-        <br>{ "chefId" : int, "orderId" : int, "itemId": int}
-        <br>This will assign the particular item in that order to the Chef
-        <br><br>
-        2. POST req on /chef : Sending the same json data
-        <br>Will change status to prepared - done
-    </p>
-    <h2>Chef's Portal</h2>
-    <ul>
-    {{range .Items}}
-        <li><p>{{.ItemName}} - Qty: {{.Quantity}} - OrderId: {{.OrderId}} - ItemId: {{.ItemId}}
-            <br>{{if .Assigned}}
-                Assigned to {{.ChefName}}
-            {{else}}
-                Unassigned
-            {{end}}
-        </p>
-        </li>
-    {{end}}
-    </ul>
+<div id="cover">
+    <input type="hidden" id="current-user" data-user_id="{{.UserId}}">
+    <div class="container pt-5 mb-5">
+        <div class="d-flex flex-wrap" id="top_buttons">
+            <form action="/menu" method="GET" class="me-3 mb-3">
+                <button id="view_menu" class="btn btn-primary">View Menu</button>
+            </form>
+        </div>
+
+        <h3 class="text-center mb-4">Manage Orders</h3>
+        <div class="d-flex justify-content-center mb-4 flex-wrap gap-2">
+            <button class="btn btn-outline-primary filter-btn active" data-chef="all">All Active</button>
+            <button class="btn btn-outline-success filter-btn" data-chef="unassigned">Unassigned</button>
+            <button class="btn btn-outline-warning filter-btn" data-chef="mine">Mine</button>
+
+        </div>
+        <div class="order_table">
+            <table class="table table-bordered table-hover text-center align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Item Name</th>
+                        <th>Quantity</th>
+                        <th>Order Id</th>
+                        <th>Instructions</th>
+                        <th>Chef</th>
+                        <th>Details</th>
+                        <th>Complete</th>
+                    </tr>
+                </thead>
+                <tbody id="orders_table_body">
+                    {{range .Items}}
+                        <tr data-chef_id="{{.ChefId}}" data-user_id="{{$.UserId}}">
+                            <td>{{.ItemName}}</td>
+                            <td>{{.Quantity}}</td>
+                            <td>{{.OrderId}}</td>
+                            <td id="instructions">{{.Instructions}}</td>
+                            <td>
+                                {{if .Assigned}}
+                                    Assigned to {{.ChefName}}
+                                {{else}}
+                                    Unassigned
+                                {{end}}
+                            </td>
+                            <td>
+                                {{if .Assigned}}
+                                    {{if eq $.UserId .ChefId}}
+                                        Yours
+                                    {{else}}
+                                        Taken!
+                                    {{end}}
+                                {{else}}
+                                    <button class="btn btn-sm btn-outline-info approve-btn" data-order_id="{{.OrderId}}" data-item_id="{{.ItemId}}">Assign to Me</button>
+                                {{end}}
+                            </td>
+                            <td>
+                                {{if eq $.UserId .ChefId}}
+                                    <button class="btn btn-sm btn-success done-btn" data-order_id="{{.OrderId}}" data-item_id="{{.ItemId}}">Mark Complete</button>
+                                {{else}}
+                                    -
+                                {{end}}
+                            </td>
+                        </tr>
+                    {{end}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
 {{end}}

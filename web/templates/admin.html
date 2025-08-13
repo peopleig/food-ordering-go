@@ -1,42 +1,121 @@
 {{define "content"}}
-    <h1>{{.Title}}</h1>
-    <p>No time for frontend right now. Sorry.
-        <br>To access admin's powers - 
-        <br> 1. GET req on /bill, to see bills
-        <br><br>
-        2. POST req on /admin/{:user_id} : Approval POST req.
-        <br>Will change status of approved to true
-    </p>
-    <h2>Admin's Portal</h2>
-    <ul>
-    <h2>All Ordered Items:</h2>
-    {{range .Items}}
-        <li><p>{{.ItemName}} - Qty: {{.Quantity}} - OrderId: {{.OrderId}} - ItemId: {{.ItemId}}
-            <br>{{if .Assigned}}
-                Assigned to {{.ChefName}}
-            {{else}}
-                Unassigned
-            {{end}}
-        </p>
-        </li>
-    {{end}}
-    </ul>
-    <h2>All Orders:</h2>
-    <ul>
-    {{range .Orders}}
-        <li><p>{{.OrderId}} - User_ID: {{.UserId}} - Status: {{.Status}} - Table Number: {{.Table_number}}
-        </p>
-        </li>
-    {{end}}
-    </ul>
+<div class="container mt-5 pt-5 mb-5">
+        <div class="d-flex flex-wrap" id="top_buttons">
+            <form action="/menu" method="GET" class="me-3 mb-3">
+                <button id="view_menu" class="btn btn-primary">View Menu</button>
+            </form>
+            <form action="/admin/dish" method="GET" class="me-3 mb-3">
+                <button id="add_dish" class="btn btn-primary">Add Dish</button>
+            </form>
+            <!-- <form action="/admin/add_category" method="GET" class="me-3 mb-3">
+                <button id="add_category" class="btn btn-primary">Add Category</button>
+            </form> -->
+        </div>
 
-    <h2>All Unapproved Users:</h2>
-    <ul>
-    {{range .Uausers}}
-        <li><p>{{.UserId}} - User_ID, {{.Name}} - Name,  {{.Role}} - Role
-        </p>
-        </li>
-    {{end}}
-    </ul>
+        <h3 class="text-center mb-4">Manage Orders</h3>
+        <div class="d-flex justify-content-center mb-4 flex-wrap gap-2">
+            <button class="btn btn-outline-primary filter-btn order_buttons active" data-status="all">All</button>
+            <button class="btn btn-outline-warning filter-btn order_buttons" data-status="preparing">Preparing</button>
+            <button class="btn btn-outline-danger filter-btn order_buttons" data-status="payment_pending">Payment Pending</button>
+            <button class="btn btn-outline-success filter-btn order_buttons" data-status="completed">Completed</button>
+        </div>
+        <div class="order_table">
+            <table class="table table-bordered table-hover text-center align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Status</th>
+                        <th>Order ID</th>
+                        <th>User ID</th>
+                        <th>Order Type</th>
+                        <th>Table No.</th>
+                    </tr>
+                </thead>
+                <tbody id="orders_table_body">
+                    {{range .Orders}}
+                        <tr>
+                            <td>{{.Status}}</td>
+                            <td>{{.OrderId}}</td>
+                            <td>{{.UserId}}</td>
+                            <td>{{.Order_type}}</td>
+                            <td>{{.Table_number}}</td>
+                        </tr>
+                    {{end}}
+                </tbody>
+            </table>
+        </div>
+        <h3 class="text-center mb-4">Dishes Ordered</h3>
+        <div class="d-flex justify-content-center mb-4 flex-wrap gap-2">
+            <button class="btn btn-outline-primary filter-btn active item_buttons" data-chef="all">All Active</button>
+            <button class="btn btn-outline-success filter-btn item_buttons" data-chef="unassigned">Unassigned</button>
+            <button class="btn btn-outline-warning filter-btn item_buttons" data-chef="assigned">Assigned</button>
+        </div>
+        <div class="item_table">
+            <table class="table table-bordered table-hover text-center align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Item Name</th>
+                        <th>Quantity</th>
+                        <th>Order Id</th>
+                        <th>Instructions</th>
+                        <th>Chef</th>
+                    </tr>
+                </thead>
+                <tbody id="items_table_body">
+                    {{range .Items}}
+                        <tr>
+                            <td>{{.ItemName}}</td>
+                            <td>{{.Quantity}}</td>
+                            <td>{{.OrderId}}</td>
+                            <td id="instructions">{{.Instructions}}</td>
+                            <td>{{if .Assigned}}
+                                    {{.ChefName}}
+                                {{else}}
+                                    Unassigned
+                                {{end}}
+                            </td>
+                        </tr>
+                    {{end}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="container mb-5">
+        <h3 class="text-center mb-4">Pending Approvals</h3>
+        <div class="approval_table">
+            <table class="table table-bordered table-hover text-center align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>User ID</th>
+                        <th>Name</th>
+                        <th>Role</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{range .Uausers}}
+                        <tr>
+                            <td>{{.UserId}}</td>
+                            <td>{{.Name}}</td>
+                            <td>{{.Role}}</td>
+                            <td>
+                                <button class="btn btn-sm btn-success approve-btn" data-user-id="{{.UserId}}">Approve</button>
+                            </td>
+                        </tr>
+                    {{end}}
+                </tbody>
+            </table>
+        </div>
+    </div>    
+</div>
+    <!-- <div id="order_popup" class="position-fixed top-50 start-50 translate-middle bg-white p-4 shadow rounded d-none">
+        <h5 class="mb-3">Order Details</h5>
+        <p>Details here</p>
+        <div class="d-flex flex-wrap gap-2 justify-content-between mt-3">
+            <form id="get_bill" method="GET">
+                <button type="submit" class="btn btn-info btn-sm">Get Bill</button>
+            </form>
+            <button class="btn btn-secondary btn-sm" id="close_popup">Close</button>
+        </div>
+    </div> -->
 
 {{end}}

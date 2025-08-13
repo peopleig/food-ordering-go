@@ -1,0 +1,68 @@
+{{define "content"}}
+<div id="cover">
+    <div class="container mt-5 pt-5">
+        <div class="bg-white p-4 rounded shadow-sm" style="max-width: 700px; margin: auto;">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3 class="text-center mb-4">Add New Dish</h3>
+                <form action="/admin" method="GET">
+                    <button class="btn btn-outline-success" type="submit"><i class="fa-solid fa-user-tie" title="Admin Page"></i></button>
+                </form>
+            </div>
+            <form action="/admin/dish" method="POST" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label for="dish_name" class="form-label">Dish Name</label>
+                    <input type="text" class="form-control" id="dish_name" name="dish_name" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="category_id" class="form-label">Category</label>
+                    <select class="form-select" id="category" name="category" required>
+                        <option value="" disabled selected>Select a Category</option>
+                        {{range .Categories}}
+                            <option value="{{.CategoryName}}">
+                                {{.CategoryName}}
+                            </option>
+                        {{end}}
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="price" class="form-label">Price (₹)</label>
+                    <input type="number" class="form-control" id="price" name="price" min="1" step="0.01" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label for="image" class="form-label">Upload Dish Image</label>
+                    <input type="file" class="form-control" id="image" name="image" accept="image/*" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Is it Vegetarian?</label><br>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="is_veg" id="veg" value="1" checked>
+                        <label class="form-check-label" for="veg">Yes</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="is_veg" id="nonveg" value="0">
+                        <label class="form-check-label" for="nonveg">No</label>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="spice_level" class="form-label">Spice Level (-5 to 5)</label>
+                    <input type="number" class="form-control" id="spice_level" name="spice_level" min="-5" max="5" required>
+                    <small class="form-text text-muted">Use negative values for sweet dishes (e.g., -5 is very sweet)</small>
+                </div>
+
+                <div class="text-end">
+                    <button type="submit" class="btn btn-success">Add Dish</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{{end}}
