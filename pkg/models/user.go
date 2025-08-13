@@ -15,27 +15,6 @@ type User struct {
 	Approved bool   `json:"approved"`
 }
 
-// func GetAllUsers() ([]User, error) {
-// 	query := "SELECT user_id, first_name, last_name FROM User"
-// 	rows, err := DB.Query(query)
-// 	if err != nil {
-// 		return nil, fmt.Errorf("error querying users: %v", err)
-// 	}
-// 	defer rows.Close()
-
-// 	var users []User
-// 	for rows.Next() {
-// 		var user User
-// 		err := rows.Scan(&user.User_id, &user.First_name, &user.Last_name)
-// 		if err != nil {
-// 			return nil, fmt.Errorf("error scanning user: %v", err)
-// 		}
-// 		users = append(users, user)
-// 	}
-
-// 	return users, nil
-// }
-
 func GetUserPwdatLogin(login_type string, identifier string) (User, error) {
 	var query string
 	var value interface{}
@@ -78,4 +57,15 @@ func CreateNewUser(new_user *types.NewUser) (bool, string, int64, error) {
 		return false, "Error in accessing database", 0, err
 	}
 	return true, "", user_id, nil
+}
+
+func CheckForUser(orderId int) (int, error) {
+	query := `SELECT user_id FROM Orders WHERE order_id = ?`
+	var userId int
+	err := DB.QueryRow(query, orderId).Scan(&userId)
+	if err != nil {
+		fmt.Println(err)
+		return -1, err
+	}
+	return userId, nil
 }

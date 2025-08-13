@@ -17,6 +17,15 @@
             {{end}}
         </div>
     </div>
+    <button id="surprise-me-btn" class="btn btn-outline-warning mb-3 ms-2">Surprise Me</button>
+    <div id="surprise-popup" class="position-fixed top-50 start-50 translate-middle bg-white p-4 shadow rounded d-none z-3" style="min-width: 300px;">
+        <h5 class="mb-3">How many people?</h5>
+        <input type="number" id="people-count" class="form-control mb-3" min="1" placeholder="Enter number of people">
+        <div class="d-flex justify-content-between">
+            <button id="cancel-surprise" class="btn btn-secondary btn-sm">Cancel</button>
+            <button id="generate-surprise" class="btn btn-success btn-sm">Surprise Me!</button>
+        </div>
+    </div>
     <div class="order-options">
         <input type="text" id="specialInstructions" placeholder="Special Instructions" />
         <select id="orderType">
@@ -42,8 +51,9 @@
                     {{if .Is_veg}}
                         <span class="badge bg-success">Veg</span>
                     {{else}}
-                        <span class="badge bg-warning text-dark">Non-Veg</span>
+                        <span class="badge bg-danger">Non-Veg</span>
                     {{end}}
+                    <span class="badge bg-warning text-dark">{{.Category_name}}</span>
                 </div>
                 <div class="card-footer">
                     <button class="btn btn-primary add-buttons"  data-item-id="{{.Item_id}}" onclick="addToCart('{{.Item_id}}', '{{.Item_name}}', '{{.Price}}', this)">Add to Cart</button>

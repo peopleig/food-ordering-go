@@ -51,8 +51,13 @@ func MenuHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		table_number, err := strconv.Atoi(order.Table_number)
-		if err != nil {
-			http.Error(w, "Error in parsing table number data", http.StatusInternalServerError)
+		if order.Order_type == "takeaway" {
+			table_number = 0
+		} else {
+			if err != nil {
+				http.Error(w, "Error in parsing table number data", http.StatusInternalServerError)
+				return
+			}
 		}
 		if order.Order_type == "takeaway" {
 			table_number = 0

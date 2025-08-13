@@ -89,8 +89,10 @@ async function placeOrder() {
             },
             body: JSON.stringify(payload)
         });
-
-        if (!response.ok) throw new Error("Order request failed");
+        if (!response.ok){
+            alert("Unable to Place Order");
+            throw new Error("Order request failed");
+        }
 
         const result = await response.json();
         console.log("Order placed successfully:", result);
@@ -121,3 +123,78 @@ order_filters.forEach(button => {
         button.classList.add("active");
     });
 });
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    const surpriseBtn = document.getElementById("surprise-me-btn");
+    const surprisePopup = document.getElementById("surprise-popup");
+    const cancelBtn = document.getElementById("cancel-surprise");
+    const generateBtn = document.getElementById("generate-surprise");
+
+    surpriseBtn.onclick = () => {
+        document.getElementById("people-count").value = "";
+        surprisePopup.classList.remove("d-none");
+    };
+
+    cancelBtn.onclick = () => {
+        surprisePopup.classList.add("d-none");
+    };
+
+    generateBtn.onclick = () => {
+        const peopleCount = parseInt(document.getElementById("people-count").value);
+        if (isNaN(peopleCount) || peopleCount <= 0) {
+            alert("Enter a valid number!");
+            return;
+        }
+        cart.forEach(item => revertAddButton(item.itemId));
+        cart = [];
+        renderCart();
+
+        const allButtons = [...document.querySelectorAll(".add-buttons")];
+
+        const allDishes = allButtons.map(btn => {
+            const card = btn.closest(".card");
+            const name = card.querySelector(".card-title").textContent.trim();
+            const price = parseFloat(card.querySelector(".fw-bold").textContent.replace("₹", "").trim());
+            const isVeg = card.querySelector(".badge.bg-success") !== null;
+            const itemId = parseInt(btn.getAttribute("data-item-id"));
+            const img = card.querySelector("img").src;
+            const category = categorizeDish(card.querySelector(".badge.bg-warning.text-dark").textContent.trim());
+            return { itemId, name, price, isVeg, img, btn, category };
+        });
+        const randomItem = arr => arr[Math.floor(Math.random() * arr.length)];
+        const beverages = allDishes.filter(d => d.category === "beverage");
+        const desserts = allDishes.filter(d => d.category === "dessert");
+        const mains = allDishes.filter(d => d.category === "main");
+        const selected = [];
+        if (beverages.length > 0)
+            selected.push({ ...randomItem(beverages), quantity: peopleCount });
+        if (desserts.length > 0)
+            selected.push({ ...randomItem(desserts), quantity: peopleCount });
+        const shuffledMains = mains.sort(() => 0.5 - Math.random());
+        selected.push(...shuffledMains.slice(0, peopleCount).map(d => ({ ...d, quantity: 1 })));
+        selected.forEach(dish => {
+            cart.push({
+                itemName: dish.name,
+                quantity: dish.quantity,
+                itemId: dish.itemId,
+                price: dish.price
+            });
+            dish.btn.textContent = "Added to Cart";
+            dish.btn.classList.remove("btn-primary");
+            dish.btn.classList.add("btn-success");
+        });
+        renderCart();
+        surprisePopup.classList.add("d-none");
+        document.getElementById("cart-list").scrollIntoView({ behavior: "smooth" });
+    }
+    function categorizeDish(name) {
+        if (name === "Desserts") {
+            return "dessert";
+        }
+        else if (name === "Beverages")
+            return "beverage";
+        return "main";
+    }
+});
+
