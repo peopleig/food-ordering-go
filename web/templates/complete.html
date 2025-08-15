@@ -10,4 +10,16 @@
     <div class="text-end mb-4">
         <p><b>Final Total:</b> ₹<span id="final_total">{{.Order.AmtPaid}}</span></p>
     </div>
+{{if .Show}}
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 9999;">
+        <div class="toast custom-toast show" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    {{.Message}}
+                </div>
+                <button type="button" class="btn-close btn-close-black me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+{{end}}
 {{end}}

@@ -45,35 +45,88 @@ function decrementItem(itemName) {
     }
 }
 
+// function renderCart() {
+//     const cartList = document.getElementById("cart-list");
+//     cartList.innerHTML = "";
+//     cart.forEach(item => {
+//         let li = document.createElement("li");
+//         let itemText = document.createElement("span");
+//         itemText.textContent = `${item.itemName} - Qty: ${item.quantity}`;
+//         let btnContainer = document.createElement("div");
+//         let incrementBtn = document.createElement("button");
+//         incrementBtn.textContent = "+";
+//         incrementBtn.onclick = () => incrementItem(item.itemName);
+//         let decrementBtn = document.createElement("button");
+//         decrementBtn.textContent = "-";
+//         decrementBtn.onclick = () => decrementItem(item.itemName);
+//         btnContainer.appendChild(incrementBtn);
+//         btnContainer.appendChild(decrementBtn);
+//         li.appendChild(itemText);
+//         li.appendChild(btnContainer);
+//         cartList.appendChild(li);
+//     });
+//     console.log(cart);
+// }
 function renderCart() {
     const cartList = document.getElementById("cart-list");
+    const cartTotal = document.getElementById("cart-total");
     cartList.innerHTML = "";
+    let total = 0;
+
     cart.forEach(item => {
+        total += item.price * item.quantity;
         let li = document.createElement("li");
-        let itemText = document.createElement("span");
-        itemText.textContent = `${item.itemName} - Qty: ${item.quantity}`;
+        li.classList.add("cart-item");
+        let nameSpan = document.createElement("span");
+        nameSpan.classList.add("item-name");
+        nameSpan.textContent = item.itemName;
+        let qtySpan = document.createElement("span");
+        qtySpan.classList.add("item-qty");
+        qtySpan.textContent = `Qty: ${item.quantity}`;
+        let priceSpan = document.createElement("span");
+        priceSpan.classList.add("item-price");
+        priceSpan.textContent = `₹${item.price * item.quantity}`;
         let btnContainer = document.createElement("div");
+        btnContainer.classList.add("item-controls");
         let incrementBtn = document.createElement("button");
         incrementBtn.textContent = "+";
+        incrementBtn.classList.add("btn", "btn-sm", "btn-outline-success");
         incrementBtn.onclick = () => incrementItem(item.itemName);
         let decrementBtn = document.createElement("button");
         decrementBtn.textContent = "-";
+        decrementBtn.classList.add("btn", "btn-sm", "btn-outline-danger", "ms-1");
         decrementBtn.onclick = () => decrementItem(item.itemName);
         btnContainer.appendChild(incrementBtn);
         btnContainer.appendChild(decrementBtn);
-        li.appendChild(itemText);
+        li.appendChild(nameSpan);
+        li.appendChild(qtySpan);
+        li.appendChild(priceSpan);
         li.appendChild(btnContainer);
         cartList.appendChild(li);
     });
+
+    cartTotal.textContent = `Total: ₹${total}`;
     console.log(cart);
 }
 
+
+const table = document.getElementById("tableNo");
+table.addEventListener("input", () => {
+    let tableNumber = table.value;
+    if (tableNumber < 0) {
+        tableNumber = 0;
+        table.value = 0;
+    }
+    else if (tableNumber > 20) {
+        tableNumber = 20;
+        table.value = 20;
+    }
+});
 
 async function placeOrder() {
     try {
         const specialInstructions = document.getElementById("specialInstructions").value;
         const orderType = document.getElementById("orderType").value;
-        const tableNumber = document.getElementById("tableNo").value;
 
         const payload = {
             cart: cart,
@@ -196,5 +249,20 @@ document.addEventListener("DOMContentLoaded", () => {
             return "beverage";
         return "main";
     }
+});
+
+
+const categoryFilter = document.getElementById("categoryFilter");
+const cards = document.querySelectorAll(".menu-grid .card");
+categoryFilter.addEventListener("change", () => {
+    const selectedCategory = categoryFilter.value;
+    cards.forEach(card => {
+        const cardCategory = card.getAttribute("data-category");
+        if (selectedCategory === "all" || cardCategory === selectedCategory) {
+            card.style.display = "block";
+        } else {
+            card.style.display = "none";
+        }
+    });
 });
 

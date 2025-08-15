@@ -33,12 +33,13 @@ func SetupRouter() *mux.Router {
 	adminRouter := protected.PathPrefix("/admin").Subrouter()
 	adminRouter.Use(middleware.AllowAdminAccess)
 	adminRouter.HandleFunc("", controllers.AdminHandler).Methods("GET")
-	adminRouter.HandleFunc("/{user_id}", controllers.AdminApproveHandler).Methods("PATCH")
+	adminRouter.HandleFunc("/{user_id}", controllers.AdminApproveHandler).Methods("PATCH", "DELETE")
 	adminRouter.HandleFunc("/dish", controllers.AdminDishHandler).Methods("GET", "POST")
+	// adminRouter.HandleFunc("/category", controllers.AdminCategoryHandler).Methods("POST", "DELETE")
 
 	billRouter := protected.PathPrefix("/bill").Subrouter()
 	billRouter.Use(middleware.AllowAdminandIdAccess)
-	billRouter.HandleFunc("/", controllers.BillPayerHandler).Methods("POST")
+	billRouter.HandleFunc("/{order_id}", controllers.BillPayerHandler).Methods("POST")
 	billRouter.HandleFunc("/{status}/{order_id}", controllers.SingleBillHandler).Methods("GET")
 
 	protected.HandleFunc("/logout", controllers.LogoutHandler).Methods("POST")

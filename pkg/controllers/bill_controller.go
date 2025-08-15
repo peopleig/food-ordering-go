@@ -42,14 +42,25 @@ func BillPayerHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Invalid JSON", http.StatusBadRequest)
 		return
 	}
+	orderIdString := strconv.Itoa(billpay.OrderId)
+	redirectURL := "/bill/completed/" + orderIdString + "?show=success"
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(map[string]string{"status": "success"})
+	json.NewEncoder(w).Encode(map[string]string{
+		"redirect": redirectURL,
+	})
 }
 
 func SingleBillHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	orderId, _ := strconv.Atoi(vars["order_id"])
 	status := vars["status"]
+	showMsg := r.URL.Query().Get("show")
+	show := false
+	message := ""
+	if showMsg == "success" {
+		show = true
+		message = "Payment successful!"
+	}
 	var isSame bool
 	status, isSame = models.ConfirmOrderStatus(orderId, status)
 	if !isSame {
@@ -63,14 +74,12 @@ func SingleBillHandler(w http.ResponseWriter, r *http.Request) {
 	case "preparing", "payment_pending":
 		err := models.GetSingleBill(orderId, &Contents, &billOrder)
 		if err != nil {
-			fmt.Println(err)
 			http.Error(w, "couldn't access DB", http.StatusInternalServerError)
 			return
 		}
 	case "completed":
 		err := models.GetFinalBill(orderId, &Contents, &completeBill)
 		if err != nil {
-			fmt.Println(err)
 			http.Error(w, "couldn't access DB", http.StatusInternalServerError)
 			return
 		}
@@ -98,6 +107,8 @@ func SingleBillHandler(w http.ResponseWriter, r *http.Request) {
 			Title:    "Bill",
 			Contents: Contents,
 			Order:    completeBill,
+			Show:     show,
+			Message:  message,
 		}
 		utils.RenderTwoTemplates(w, "bill", "complete", data)
 	default:

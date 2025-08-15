@@ -30,10 +30,17 @@ func MenuHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "error finding your bills", http.StatusInternalServerError)
 			return
 		}
+		var categories []types.Categories
+		err = models.GetAllCategories(&categories)
+		if err != nil {
+			http.Error(w, "unable to fetch all categories", http.StatusInternalServerError)
+			return
+		}
 		data := types.MenuData{
-			Title: "Menu",
-			Bills: myBills,
-			Items: config.MenuCache,
+			Title:      "Menu",
+			Bills:      myBills,
+			Items:      config.MenuCache,
+			Categories: categories,
 		}
 		fmt.Println(user_id, role)
 		utils.RenderTemplate(w, "menu", data)

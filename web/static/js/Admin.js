@@ -10,6 +10,20 @@ document.querySelectorAll('.approve-btn').forEach(btn => {
         }
     });
 });
+
+document.querySelectorAll('.decline-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+        const userId = btn.getAttribute('data-user-id');
+        const res = await fetch(`/admin/${userId}`, { method: "DELETE" }); 
+        if (res.ok) {
+            alert("Deleted Request!")
+            window.location.href = '/admin';
+        } else {
+            alert("Decline failed.");
+        }
+    });
+});
+
 const rows = document.querySelectorAll("#orders_table_body tr");
 const filter_buttons = document.querySelectorAll(".order_buttons");
 filter_buttons.forEach(btn => {
