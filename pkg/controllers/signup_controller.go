@@ -91,7 +91,15 @@ func SignupHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		if new_user.Role != "customer" {
-			http.Error(w, "You haven't yet been granted approval from the admin for this role. Please wait till then", http.StatusUnauthorized)
+			// w.WriteHeader(http.StatusBadRequest)
+			// data := map[string]string{
+			// 	"Title":   "Signup",
+			// 	"Message": message,
+			// 	"Error":   "True",
+			// }
+			// utils.RenderTemplate(w, "signup", data)
+			// return
+			http.Redirect(w, r, "/error?error=signup", http.StatusSeeOther)
 			return
 		}
 

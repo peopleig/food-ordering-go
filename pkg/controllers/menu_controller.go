@@ -15,7 +15,7 @@ import (
 
 func MenuHandler(w http.ResponseWriter, r *http.Request) {
 	user_id := r.Context().Value("user_id").(int)
-	role := r.Context().Value("role").(string)
+	// role := r.Context().Value("role").(string)
 	switch r.Method {
 	case http.MethodGet:
 		err := cache.LoadMenu()

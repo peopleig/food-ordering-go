@@ -21,6 +21,7 @@ func SetupRouter() *mux.Router {
 	router.HandleFunc("/", controllers.HomeHandler).Methods("GET")
 	router.HandleFunc("/login", controllers.LoginHandler).Methods("GET", "POST")
 	router.HandleFunc("/signup", controllers.SignupHandler).Methods("GET", "POST")
+	router.HandleFunc("/error", controllers.ErrorController).Methods("GET")
 	protected := router.PathPrefix("/").Subrouter()
 	protected.Use(middleware.JWTMiddleware)
 

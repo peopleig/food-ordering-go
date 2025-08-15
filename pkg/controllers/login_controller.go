@@ -74,7 +74,8 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		if !user.Approved {
-			http.Error(w, "Cheeky cheeky. But you're still not approved. Wait while the admin does it", http.StatusUnauthorized)
+			http.Redirect(w, r, "/error?error=login", http.StatusSeeOther)
+			return
 		}
 		user_id, _ := strconv.Atoi(user.User_id)
 

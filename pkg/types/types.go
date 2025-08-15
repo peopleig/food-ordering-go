@@ -1,5 +1,7 @@
 package types
 
+import "html/template"
+
 type NewUser struct {
 	Role       string `json:"role" schema:"role"`
 	First_name string `json:"first_name" schema:"first_name"`
@@ -178,4 +180,10 @@ type NewDish struct {
 	Description string `schema:"description"`
 	IsVeg       string `schema:"is_veg"`
 	SpiceLevel  string `schema:"spice_level"`
+}
+
+type ErrorPageData struct {
+	Title   string        `json:"title"`
+	Status  string        `json:"status"`
+	Message template.HTML `json:"message"`
 }
