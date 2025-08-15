@@ -18,8 +18,8 @@ html, body {
 }
 
 .header {
-    background-color: #021945 !important;
-    color: #98FF98;
+    background-color: #040403 !important;
+    color: #D6EEB7;
     padding: 20px;
     font-family: 'Metamorphous', serif;
     font-size: 2rem !important;
@@ -45,7 +45,7 @@ i {
     
     margin-bottom: 0;
     width: 10px;
-    color: #021945;
+    color: #040403;
 }
 
 .ms-3 {
@@ -54,8 +54,8 @@ i {
 }
 .loggingout {
     width: auto;
-    background-color: #98FF98;
-    border-color: #98FF98;
+    background-color: #D6EEB7;
+    border-color: #D6EEB7;
 }
 
 .content {
@@ -64,9 +64,9 @@ i {
 }
 
 .footer {
-    background-color: #f1f1f1;
+    background-color: #040403;
+    color: #f1f1f1;
     text-align: center;
     padding: 15px;
     font-size: 14px;
-    color: black;
 }

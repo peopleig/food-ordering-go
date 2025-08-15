@@ -1,19 +1,27 @@
-#wrapper {
-    top: 14%;
-    bottom: 11%;
-    overflow: scroll;
-    position: fixed;
-    width: 100%;
-    align-items: center;
+.content {
+    flex: 1;
     display: flex;
-    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: black;
+    overflow: hidden;
+    position: relative;
 }
-#cover {
-    background-image: url('../images/bg.jpg');
-    background-repeat: repeat;
-    background-position: center;
+.content {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: black;
+    background-image: url('/static/images/cookie.jpg');
+    background-repeat: no-repeat;
+    background-position: -10rem center;
     background-size: contain;
-    position: absolute;
+}
+
+
+
+#cover {
     width: 50%;
     height: 100%;
     border-radius: 2rem;
@@ -21,7 +29,11 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
+    padding: 2rem;
+    box-sizing: border-box;
 }
+
 #introduction {
     color: white;
     font-family: 'Metamorphous', serif;
@@ -30,27 +42,8 @@
     margin-bottom: 2rem;
 }
 .btn.btn-primary {
-    background-color: #98FF98;
-    border-color: #98FF98;
+    background-color: #D6EEB7;
+    border-color: #D6EEB7;
     color: #021945;
     font-family: 'Metamorphous', serif;
-}
-
-@media (max-width: 1300px) {
-    #cover {
-        width: 70%;
-        left: 15%;
-    }
-}
-@media (max-width: 900px) {
-    #cover {
-        width: 80%;
-        left: 10%;
-    }
-}
-@media (max-width: 620px) {
-    #cover {
-        width: 90%;
-        left: 5%;
-    }
 }

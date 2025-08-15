@@ -111,8 +111,9 @@ function renderCart() {
 
 
 const table = document.getElementById("tableNo");
+let tableNumber;
 table.addEventListener("input", () => {
-    let tableNumber = table.value;
+    tableNumber = table.value;
     if (tableNumber < 0) {
         tableNumber = 0;
         table.value = 0;
@@ -127,7 +128,7 @@ async function placeOrder() {
     try {
         const specialInstructions = document.getElementById("specialInstructions").value;
         const orderType = document.getElementById("orderType").value;
-
+        console.log(tableNumber);
         const payload = {
             cart: cart,
             special_instructions: specialInstructions,

@@ -14,7 +14,6 @@ import (
 
 func BillHandler(w http.ResponseWriter, r *http.Request) {
 	user_id := r.Context().Value("user_id").(int)
-	fmt.Println(user_id)
 	var mybills []types.MyBills
 	err := models.GetBills(user_id, &mybills)
 	if err != nil {
