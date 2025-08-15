@@ -42,7 +42,6 @@ func MenuHandler(w http.ResponseWriter, r *http.Request) {
 			Items:      config.MenuCache,
 			Categories: categories,
 		}
-		fmt.Println(user_id, role)
 		utils.RenderTemplate(w, "menu", data)
 
 	case http.MethodPost:
@@ -69,7 +68,6 @@ func MenuHandler(w http.ResponseWriter, r *http.Request) {
 		if order.Order_type == "takeaway" {
 			table_number = 0
 		}
-		fmt.Printf("Got order: %+v\n", order)
 		cache.LoadMenu()
 		err = models.CreateNewOrder(&order, table_number, user_id)
 		if err != nil {

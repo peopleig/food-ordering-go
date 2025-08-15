@@ -31,13 +31,10 @@ func ChefHandler(w http.ResponseWriter, r *http.Request) {
 		var assign types.ChefAssignRequest
 
 		err := json.NewDecoder(r.Body).Decode(&assign)
-		fmt.Println(r.Body)
 		if err != nil {
 			http.Error(w, "Invalid JSON", http.StatusBadRequest)
 			return
 		}
-
-		fmt.Printf("Received PATCH: %+v\n", assign)
 		err = models.AssignToChef(&assign)
 		if err != nil {
 			fmt.Println(err)

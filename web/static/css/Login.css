@@ -1,22 +1,20 @@
-#wrapper {
-    top: 14%;
-    bottom: 11%;
-    overflow: scroll;
-    position: fixed;
-    width: 100%;
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-}
 .content {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: black;
+    overflow: hidden;
+    position: relative;
     padding: 0 !important;
-}
-#cover {
-    background-image: url('../images/bg.jpg');
-    background-repeat: repeat;
-    background-position: center;
+    background-color: black;
+    background-image: url('/static/images/cookie.jpg');
+    background-repeat: no-repeat;
+    background-position: -10rem center;
     background-size: contain;
-    position: absolute;
+}
+
+#cover {
     width: 50%;
     height: 100%;
     border-radius: 2rem;
@@ -25,14 +23,17 @@
     justify-content: center;
     align-items: center;
     color: white;
+    padding: 2rem;
+    box-sizing: border-box;
     font-family: 'Metamorphous', serif;
 }
+
 .mt-5{
     margin-top: 0rem !important;
 }
 .btn.btn-primary {
-    background-color: #98FF98;
-    border-color: #98FF98;
+    background-color: #D6EEB7;
+    border-color: #D6EEB7;
     color: #021945;
     font-family: 'Metamorphous', serif;
 }
@@ -65,12 +66,12 @@
     z-index: 101;
 }
 .toast-body, .d-flex{
-    background-color: #98FF98;
+    background-color: #D6EEB7;
     color: #021945;
 }
 .redirect {
     font-size: small;
     border: none;
     margin-top: 1rem;
-    color: #98FF98;
+    color: #D6EEB7;
 }

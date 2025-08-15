@@ -2,12 +2,12 @@
     z-index: 101;
 }
 .toast-body, .toast{
-    background-color: #98FF98;
+    background-color: #D6EEB7;
     color: #021945;
 }
 .redirect {
     font-size: small;
     border: none;
     margin-top: 1rem;
-    color: #98FF98;
+    color: #D6EEB7;
 }

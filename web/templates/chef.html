@@ -2,12 +2,18 @@
 <div id="cover">
     <input type="hidden" id="current-user" data-user_id="{{.UserId}}">
     <div class="container pt-5 mb-5">
-        <div class="d-flex flex-wrap" id="top_buttons">
+        <!-- <div class="d-flex flex-wrap" id="top_buttons">
             <form action="/menu" method="GET" class="me-3 mb-3">
                 <button id="view_menu" class="btn btn-primary">View Menu</button>
             </form>
+        </div> -->
+        <div id="confirm-popup" class="position-fixed top-50 start-50 translate-middle bg-white p-4 shadow rounded d-none z-3" style="min-width: 300px;">
+            <h5 class="mb-3">You sure?</h5>
+            <div class="d-flex justify-content-between">
+                <button id="cancel-confirm" class="btn btn-secondary btn-sm">Cancel</button>
+                <button id="generate-confirm" class="btn btn-success btn-sm">Yep!</button>
+            </div>
         </div>
-
         <h3 class="text-center mb-4">Manage Orders</h3>
         <div class="d-flex justify-content-center mb-4 flex-wrap gap-2">
             <button class="btn btn-outline-primary filter-btn active" data-chef="all">All Active</button>

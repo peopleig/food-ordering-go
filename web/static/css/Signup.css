@@ -1,13 +1,8 @@
 #cover {
-    background-image: url('../images/bg.jpg');
-    background-repeat: repeat;
-    background-position: center;
-    background-size: contain;
     position: inherit;
     margin: auto;
     width: 50%;
     height: auto;
-    padding: 2rem 0 2rem 0;
     border-radius: 2rem;
     display: flex;
     flex-direction: column;
@@ -16,13 +11,28 @@
     color: white;
     font-family: 'Metamorphous', serif;
 }
+.content {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: black;
+    overflow: hidden;
+    position: relative;
+    padding: 0 !important;
+    background-color: black;
+    background-image: url('/static/images/cookie.jpg');
+    background-repeat: no-repeat;
+    background-position: -10rem center;
+    background-size: contain;
+}
 
 .mt-5{
     margin-top: 0rem !important;
 }
 .btn.btn-primary {
-    background-color: #98FF98;
-    border-color: #98FF98;
+    background-color: #D6EEB7;
+    border-color: #D6EEB7;
     color: #021945;
     font-family: 'Metamorphous', serif;
 }
@@ -52,12 +62,12 @@
     z-index: 101;
 }
 .toast-body, .d-flex{
-    background-color: #98FF98;
-    color: #021945;
+    background-color: #D6EEB7;
+    color: #040403;
 }
 .redirect {
     font-size: small;
     border: none;
     margin-top: 1rem;
-    color: #98FF98;
+    color: #D6EEB7;
 }
