@@ -39,20 +39,38 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		if loginData.Password == "" {
 			w.WriteHeader(http.StatusBadRequest)
-			w.Write([]byte("Missing required fields"))
+			data := map[string]string{
+				"Title":   "Login",
+				"Message": "Enter the Password!",
+				"Error":   "True",
+			}
+			utils.RenderTemplate(w, "login", data)
 			return
 		}
 		user, errr := models.GetUserPwdatLogin(loginData.LoginType, loginData.Identifier)
 		if errr != nil {
 			if errr == sql.ErrNoRows {
-				http.Error(w, "User not found", http.StatusUnauthorized)
+				w.WriteHeader(http.StatusUnauthorized)
+				data := map[string]string{
+					"Title":   "Login",
+					"Message": "Invalid Credentials",
+					"Error":   "True",
+				}
+				utils.RenderTemplate(w, "login", data)
+				return
 			} else {
 				http.Error(w, "Database error", http.StatusInternalServerError)
 			}
 		}
 
 		if !middleware.CheckPasswordHash(loginData.Password, user.Hash_pwd) {
-			http.Error(w, "Incorrect password", http.StatusUnauthorized)
+			w.WriteHeader(http.StatusUnauthorized)
+			data := map[string]string{
+				"Title":   "Login",
+				"Message": "Incorrect Password",
+				"Error":   "True",
+			}
+			utils.RenderTemplate(w, "login", data)
 			return
 		}
 		if !user.Approved {
@@ -62,7 +80,13 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 
 		token, err := utils.GenerateJWT(user_id, user.Role)
 		if err != nil {
-			http.Error(w, "Could not generate token", http.StatusInternalServerError)
+			w.WriteHeader(http.StatusInternalServerError)
+			data := map[string]string{
+				"Title":   "Login",
+				"Message": "Sorry, Server Error. Please try again",
+				"Error":   "True",
+			}
+			utils.RenderTemplate(w, "login", data)
 			return
 		}
 		http.SetCookie(w, &http.Cookie{

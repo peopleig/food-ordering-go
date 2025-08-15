@@ -32,11 +32,23 @@ func SignupHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if new_user.Email == "" && new_user.Mobile == "" {
-			http.Error(w, "Atleast one of mobile/email has to be entered", http.StatusBadRequest)
+			w.WriteHeader(http.StatusBadRequest)
+			data := map[string]string{
+				"Title":   "Signup",
+				"Message": "Atleast one of mobile/email has to be entered",
+				"Error":   "True",
+			}
+			utils.RenderTemplate(w, "signup", data)
 			return
 		}
 		if new_user.First_name == "" || new_user.Last_name == "" || new_user.Role == "" || new_user.Password == "" {
-			http.Error(w, "Cannot have empty name/role/password fields", http.StatusBadRequest)
+			w.WriteHeader(http.StatusBadRequest)
+			data := map[string]string{
+				"Title":   "Signup",
+				"Message": "Cannot have empty name/role/password fields",
+				"Error":   "True",
+			}
+			utils.RenderTemplate(w, "signup", data)
 			return
 		}
 		isValid, message := utils.CheckSignupFormValidity(new_user.Email, new_user.Mobile)
@@ -47,18 +59,35 @@ func SignupHandler(w http.ResponseWriter, r *http.Request) {
 
 		new_user.Password, err = middleware.HashPassword(new_user.Password)
 		if err != nil {
-			http.Error(w, "error in hashing pwd. try again", http.StatusInternalServerError)
+			w.WriteHeader(http.StatusInternalServerError)
+			data := map[string]string{
+				"Title":   "Signup",
+				"Message": "Sorry! Server error. Please Try again!",
+				"Error":   "True",
+			}
+			utils.RenderTemplate(w, "signup", data)
 			return
 		}
 		var user_id int64
 		isValid, message, user_id, err = models.CreateNewUser(&new_user)
-
 		if err != nil {
-			http.Error(w, message, http.StatusInternalServerError)
+			w.WriteHeader(http.StatusInternalServerError)
+			data := map[string]string{
+				"Title":   "Signup",
+				"Message": "Sorry! Server error. Please Try again!",
+				"Error":   "True",
+			}
+			utils.RenderTemplate(w, "signup", data)
 			return
 		}
 		if !isValid {
-			http.Error(w, message, http.StatusBadRequest)
+			w.WriteHeader(http.StatusBadRequest)
+			data := map[string]string{
+				"Title":   "Signup",
+				"Message": message,
+				"Error":   "True",
+			}
+			utils.RenderTemplate(w, "signup", data)
 			return
 		}
 		if new_user.Role != "customer" {
@@ -68,7 +97,13 @@ func SignupHandler(w http.ResponseWriter, r *http.Request) {
 
 		token, err := utils.GenerateJWT(int(user_id), new_user.Role)
 		if err != nil {
-			http.Error(w, "Could not generate token", http.StatusInternalServerError)
+			w.WriteHeader(http.StatusInternalServerError)
+			data := map[string]string{
+				"Title":   "Signup",
+				"Message": "Sorry! Server error. Please Try again!",
+				"Error":   "True",
+			}
+			utils.RenderTemplate(w, "signup", data)
 			return
 		}
 		http.SetCookie(w, &http.Cookie{

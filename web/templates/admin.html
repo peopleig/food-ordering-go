@@ -124,6 +124,7 @@
                             <td>{{.Role}}</td>
                             <td>
                                 <button class="btn btn-sm btn-success approve-btn" data-user-id="{{.UserId}}">Approve</button>
+                                <button class="btn btn-sm btn-danger decline-btn" data-user-id="{{.UserId}}">Decline</button>
                             </td>
                         </tr>
                     {{end}}
@@ -132,15 +133,16 @@
         </div>
     </div>    
 </div>
-    <!-- <div id="order_popup" class="position-fixed top-50 start-50 translate-middle bg-white p-4 shadow rounded d-none">
-        <h5 class="mb-3">Order Details</h5>
-        <p>Details here</p>
-        <div class="d-flex flex-wrap gap-2 justify-content-between mt-3">
-            <form id="get_bill" method="GET">
-                <button type="submit" class="btn btn-info btn-sm">Get Bill</button>
-            </form>
-            <button class="btn btn-secondary btn-sm" id="close_popup">Close</button>
+{{if .Show}}
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 9999;">
+        <div class="toast custom-toast show" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    {{.Message}}
+                </div>
+                <button type="button" class="btn-close btn-close-black me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
         </div>
-    </div> -->
-
+    </div>
+{{end}}
 {{end}}

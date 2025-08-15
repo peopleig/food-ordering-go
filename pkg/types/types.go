@@ -21,9 +21,10 @@ type Item struct {
 }
 
 type MenuData struct {
-	Title string
-	Bills []MyBills
-	Items map[int]Item
+	Title      string
+	Bills      []MyBills
+	Items      map[int]Item
+	Categories []Categories
 }
 
 type GroupedData struct {
@@ -53,6 +54,8 @@ type Categories struct {
 type GetAddDishData struct {
 	Title      string       `json:"title"`
 	Categories []Categories `json:"categories"`
+	Error      bool         `json:"error"`
+	Message    string       `json:"message"`
 }
 
 type ChefAssignRequest struct {
@@ -84,6 +87,8 @@ type AdminData struct {
 	Items   []Ordered        `json:"items"`
 	Orders  []Order          `json:"orders"`
 	Uausers []UnApprovedUser `json:"uauser"`
+	Show    bool             `json:"show"`
+	Message string           `json:"message"`
 }
 
 type Order struct {
@@ -128,6 +133,8 @@ type FinalBill struct {
 	Title    string          `json:"title"`
 	Contents []OrderContents `json:"contents"`
 	Order    CompleteBill    `json:"order"`
+	Show     bool            `json:"show"`
+	Message  string          `json:"message"`
 }
 
 type SingleBill struct {

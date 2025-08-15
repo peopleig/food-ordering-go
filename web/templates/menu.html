@@ -17,49 +17,63 @@
             {{end}}
         </div>
     </div>
-    <button id="surprise-me-btn" class="btn btn-outline-warning mb-3 ms-2">Surprise Me</button>
-    <div id="surprise-popup" class="position-fixed top-50 start-50 translate-middle bg-white p-4 shadow rounded d-none z-3" style="min-width: 300px;">
-        <h5 class="mb-3">How many people?</h5>
-        <input type="number" id="people-count" class="form-control mb-3" min="1" placeholder="Enter number of people">
-        <div class="d-flex justify-content-between">
-            <button id="cancel-surprise" class="btn btn-secondary btn-sm">Cancel</button>
-            <button id="generate-surprise" class="btn btn-success btn-sm">Surprise Me!</button>
-        </div>
-    </div>
-    <div class="order-options">
-        <input type="text" id="specialInstructions" placeholder="Special Instructions" />
-        <select id="orderType">
-            <option value="dine_in">Dine-In</option>
-            <option value="takeaway">Takeaway</option>
-        </select>
-        <input type="number" id="tableNo" placeholder="Table No." />
-        <button onclick="placeOrder()">Place Order</button>
-    </div>
-
-    <h2>Cart</h2>
-    <ul id="cart-list"></ul>
-
     <h2>Menu</h2>
-    <div class="menu-grid">
-        {{range .Items}}
-            <div class="card">
-                <img src="{{.Item_img}}">
-                <div class="card-body">
-                    <h5 class="card-title">{{.Item_name}}</h5>
-                    <p class="card-text">{{.Description}}</p>
-                    <p class="card-text fw-bold">₹{{.Price}}</p>
-                    {{if .Is_veg}}
-                        <span class="badge bg-success">Veg</span>
-                    {{else}}
-                        <span class="badge bg-danger">Non-Veg</span>
+    <div class="main">
+        <div id="main-menu">
+            <div class="mb-3">
+                <label for="categoryFilter" class="form-label">Filter by Category:</label>
+                <select id="categoryFilter" class="form-select">
+                    <option value="all">All Categories</option>
+                    {{range .Categories}}
+                        <option value="{{.CategoryName}}">{{.CategoryName}}</option>
                     {{end}}
-                    <span class="badge bg-warning text-dark">{{.Category_name}}</span>
-                </div>
-                <div class="card-footer">
-                    <button class="btn btn-primary add-buttons"  data-item-id="{{.Item_id}}" onclick="addToCart('{{.Item_id}}', '{{.Item_name}}', '{{.Price}}', this)">Add to Cart</button>
+                </select>
+            </div>
+            <div class="menu-grid">
+                {{range .Items}}
+                    <div class="card" data-category="{{.Category_name}}">
+                        <img src="{{.Item_img}}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{.Item_name}}</h5>
+                            <p class="card-text">{{.Description}}</p>
+                            <p class="card-text fw-bold">₹{{.Price}}</p>
+                            {{if .Is_veg}}
+                                <span class="badge bg-success">Veg</span>
+                            {{else}}
+                                <span class="badge bg-danger">Non-Veg</span>
+                            {{end}}
+                            <span class="badge bg-warning text-dark">{{.Category_name}}</span>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-primary add-buttons"  data-item-id="{{.Item_id}}" onclick="addToCart('{{.Item_id}}', '{{.Item_name}}', '{{.Price}}', this)">Add to Cart</button>
+                        </div>
+                    </div>
+                {{end}}
+            </div>
+        </div>
+        <div id="cart-box">
+            <h2>Cart</h2>
+            <button id="surprise-me-btn" class="btn btn-outline-warning mb-3">Surprise Me</button>
+            <div id="surprise-popup" class="position-fixed top-50 start-50 translate-middle bg-white p-4 shadow rounded d-none z-3" style="min-width: 300px;">
+                <h5 class="mb-3">How many people?</h5>
+                <input type="number" id="people-count" class="form-control mb-3" min="1" placeholder="Enter number of people">
+                <div class="d-flex justify-content-between">
+                    <button id="cancel-surprise" class="btn btn-secondary btn-sm">Cancel</button>
+                    <button id="generate-surprise" class="btn btn-success btn-sm">Surprise Me!</button>
                 </div>
             </div>
-        {{end}}
+            <div class="order-options">   
+                <textarea class="form-control" id="specialInstructions" name="description" rows="3" required placeholder="Any special requests?"></textarea>
+                <select id="orderType">
+                    <option value="dine_in">Dine-In</option>
+                    <option value="takeaway">Takeaway</option>
+                </select>
+                <input type="number" id="tableNo" min=0 max=20 placeholder="Table No." />
+            </div>
+            <ul id="cart-list"></ul>
+            <div id="cart-total" class="mt-2 text-end"></div>
+            <button onclick="placeOrder()" id="place" >Place Order</button>
+        </div>
     </div>
 </div>
 {{end}}

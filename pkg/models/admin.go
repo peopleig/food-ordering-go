@@ -45,6 +45,15 @@ func ApproveUser(user_id int) error {
 	return nil
 }
 
+func RemoveUserRequest(userId int) error {
+	query := `DELETE FROM User WHERE user_id = ?`
+	_, err := DB.Exec(query, userId)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func GetUnapprovedUsers(uausers *[]types.UnApprovedUser) error {
 	query := `SELECT user_id, CONCAT(first_name, ' ', last_name) AS name, role FROM User WHERE approved = FALSE`
 	rows, err := DB.Query(query)

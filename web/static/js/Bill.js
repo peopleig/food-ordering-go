@@ -7,11 +7,16 @@ const finalTotal = document.getElementById("final_total");
 const payBtn = document.getElementById("pay_btn");
 tipInput.addEventListener("input", () => {
     let tip = parseFloat(tipInput.value) || 0;
+    if (tip < 0) {
+        tipInput.value = 0;
+        tip = 0;
+    }
     finalTotal.textContent = (baseTotal + tip);
 });
 payBtn.addEventListener("click", async () => {
     let tip = parseFloat(tipInput.value) || 0;
-    const response = await fetch("/bill", {
+    let url = "/bill/"+orderElement.innerText
+    const response = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -19,9 +24,13 @@ payBtn.addEventListener("click", async () => {
             tip: tip
         })
     });
-    if (!response.ok) throw new Error("request failed");
-    const result = await response.json();
-    console.log(result)
-    window.location.reload();
+    if (!response.ok) {
+        alert("Unable to complete Payment. Please try again!")
+        throw new Error(`Server returned ${response.status}`);
+    }
+    const data = await response.json();
+    if (data.redirect) {
+        window.location.href = data.redirect;
+    }
 });
 
