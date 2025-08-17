@@ -45,28 +45,6 @@ function decrementItem(itemName) {
     }
 }
 
-// function renderCart() {
-//     const cartList = document.getElementById("cart-list");
-//     cartList.innerHTML = "";
-//     cart.forEach(item => {
-//         let li = document.createElement("li");
-//         let itemText = document.createElement("span");
-//         itemText.textContent = `${item.itemName} - Qty: ${item.quantity}`;
-//         let btnContainer = document.createElement("div");
-//         let incrementBtn = document.createElement("button");
-//         incrementBtn.textContent = "+";
-//         incrementBtn.onclick = () => incrementItem(item.itemName);
-//         let decrementBtn = document.createElement("button");
-//         decrementBtn.textContent = "-";
-//         decrementBtn.onclick = () => decrementItem(item.itemName);
-//         btnContainer.appendChild(incrementBtn);
-//         btnContainer.appendChild(decrementBtn);
-//         li.appendChild(itemText);
-//         li.appendChild(btnContainer);
-//         cartList.appendChild(li);
-//     });
-//     console.log(cart);
-// }
 function renderCart() {
     const cartList = document.getElementById("cart-list");
     const cartTotal = document.getElementById("cart-total");
@@ -128,7 +106,6 @@ async function placeOrder() {
     try {
         const specialInstructions = document.getElementById("specialInstructions").value;
         const orderType = document.getElementById("orderType").value;
-        console.log(tableNumber);
         const payload = {
             cart: cart,
             special_instructions: specialInstructions,

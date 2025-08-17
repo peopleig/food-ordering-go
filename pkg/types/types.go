@@ -46,7 +46,6 @@ type CartItem struct {
 	Item_name string `json:"itemName"`
 	Quantity  uint   `json:"quantity"`
 	Item_id   int    `json:"itemId"`
-	Price     uint   `json:"price"`
 }
 
 type Categories struct {
