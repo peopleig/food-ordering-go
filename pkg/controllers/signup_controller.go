@@ -91,14 +91,6 @@ func SignupHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		if new_user.Role != "customer" {
-			// w.WriteHeader(http.StatusBadRequest)
-			// data := map[string]string{
-			// 	"Title":   "Signup",
-			// 	"Message": message,
-			// 	"Error":   "True",
-			// }
-			// utils.RenderTemplate(w, "signup", data)
-			// return
 			http.Redirect(w, r, "/error?error=signup", http.StatusSeeOther)
 			return
 		}

@@ -18,7 +18,7 @@ func ChefHandler(w http.ResponseWriter, r *http.Request) {
 		err := models.GetAllOrderedItems(&items)
 		if err != nil {
 			fmt.Println(err)
-			http.Error(w, "Error while accessing DB", http.StatusBadRequest)
+			http.Redirect(w, r, "/error?error=internal", http.StatusSeeOther)
 			return
 		}
 		data := types.OrdersData{
@@ -39,7 +39,7 @@ func ChefHandler(w http.ResponseWriter, r *http.Request) {
 		err = models.AssignToChef(&assign)
 		if err != nil {
 			fmt.Println(err)
-			http.Error(w, "Failed to update", http.StatusInternalServerError)
+			http.Redirect(w, r, "/error?error=internal", http.StatusSeeOther)
 			return
 		}
 
@@ -67,7 +67,8 @@ func ChefHandler(w http.ResponseWriter, r *http.Request) {
 			err := models.UpdateOrderStatus(done.OrderID)
 			if err != nil {
 				fmt.Println(err)
-				http.Error(w, "failed to update order status", http.StatusInternalServerError)
+				http.Redirect(w, r, "/error?error=internal", http.StatusSeeOther)
+				return
 			}
 		}
 		w.Header().Set("Content-Type", "application/json")

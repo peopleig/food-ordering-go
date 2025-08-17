@@ -97,7 +97,7 @@ func AdminDishHandler(w http.ResponseWriter, r *http.Request) {
 		var categories []types.Categories
 		err := models.GetAllCategories(&categories)
 		if err != nil {
-			http.Error(w, "unable to fetch all categories", http.StatusInternalServerError)
+			http.Redirect(w, r, "/error?error=internal", http.StatusSeeOther)
 			return
 		}
 		data := types.GetAddDishData{
@@ -136,7 +136,7 @@ func AdminDishHandler(w http.ResponseWriter, r *http.Request) {
 		//Now the file
 		file, header, err := r.FormFile("image")
 		if err != nil {
-			http.Error(w, "Error retrieving the file", http.StatusInternalServerError)
+			http.Redirect(w, r, "/error?error=internal", http.StatusSeeOther)
 			return
 		}
 		defer file.Close()

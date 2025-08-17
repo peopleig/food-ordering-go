@@ -2,6 +2,7 @@ package api
 
 import (
 	"fmt"
+	"net/http"
 
 	"github.com/gorilla/mux"
 	"github.com/peopleig/food-ordering-go/pkg/controllers"
@@ -44,6 +45,7 @@ func SetupRouter() *mux.Router {
 	billRouter.HandleFunc("/{status}/{order_id}", controllers.SingleBillHandler).Methods("GET")
 
 	protected.HandleFunc("/logout", controllers.LogoutHandler).Methods("POST")
+	router.NotFoundHandler = http.HandlerFunc(controllers.Custom404Handler)
 	return router
 }
 
