@@ -43,9 +43,8 @@ type OrderRequest struct {
 }
 
 type CartItem struct {
-	Item_name string `json:"itemName"`
-	Quantity  uint   `json:"quantity"`
-	Item_id   int    `json:"itemId"`
+	Quantity uint `json:"quantity"`
+	Item_id  int  `json:"itemId"`
 }
 
 type Categories struct {
