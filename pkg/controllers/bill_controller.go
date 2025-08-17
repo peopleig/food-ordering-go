@@ -50,6 +50,7 @@ func BillPayerHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func SingleBillHandler(w http.ResponseWriter, r *http.Request) {
+	role := r.Context().Value("role").(string)
 	vars := mux.Vars(r)
 	orderId, _ := strconv.Atoi(vars["order_id"])
 	status := vars["status"]
@@ -92,6 +93,7 @@ func SingleBillHandler(w http.ResponseWriter, r *http.Request) {
 			Title:    "Bill",
 			Contents: Contents,
 			Order:    billOrder,
+			Role:     role,
 		}
 		utils.RenderTwoTemplates(w, "bill", "preparing", data)
 	case "payment_pending":
@@ -99,6 +101,7 @@ func SingleBillHandler(w http.ResponseWriter, r *http.Request) {
 			Title:    "Bill",
 			Contents: Contents,
 			Order:    billOrder,
+			Role:     role,
 		}
 		utils.RenderTwoTemplates(w, "bill", "pay", data)
 	case "completed":
@@ -108,6 +111,7 @@ func SingleBillHandler(w http.ResponseWriter, r *http.Request) {
 			Order:    completeBill,
 			Show:     show,
 			Message:  message,
+			Role:     role,
 		}
 		utils.RenderTwoTemplates(w, "bill", "complete", data)
 	default:

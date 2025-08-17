@@ -25,6 +25,7 @@ func ChefHandler(w http.ResponseWriter, r *http.Request) {
 			Title:  "Chef",
 			Items:  items,
 			UserId: user_id,
+			Role:   "chef",
 		}
 		utils.RenderTemplate(w, "chef", data)
 	case http.MethodPatch:

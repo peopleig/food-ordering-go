@@ -96,7 +96,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 			Expires:  time.Now().Add(24 * time.Hour),
 			Path:     "/",
 			HttpOnly: true,
-			Secure:   true,
+			Secure:   false,
 			SameSite: http.SameSiteStrictMode,
 		})
 		switch user.Role {

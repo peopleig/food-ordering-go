@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS Orders (
     order_type ENUM('dine_in', 'takeaway'),
     table_number INT DEFAULT 0,
     status ENUM('preparing', 'payment_pending', 'completed'),
-    total_cost FLOAT,
+    total_cost INT UNSIGNED,
     FOREIGN KEY (user_id) REFERENCES User(user_id)
 );
 CREATE TABLE IF NOT EXISTS Ordered_Items (
@@ -24,9 +24,9 @@ CREATE TABLE IF NOT EXISTS Ordered_Items (
 CREATE TABLE IF NOT EXISTS Payment (
     transaction_id BIGINT PRIMARY KEY AUTO_INCREMENT NOT NULL,
     order_id BIGINT,
-    tip_amount FLOAT DEFAULT 0,
+    tip_amount INT UNSIGNED DEFAULT 0,
     discount_reward_points BIGINT,
-    amount_paid FLOAT,
+    amount_paid INT UNSIGNED,
     payment_status ENUM('pending', 'paid', 'failed'),
     FOREIGN KEY (order_id) REFERENCES Orders (order_id)
 );

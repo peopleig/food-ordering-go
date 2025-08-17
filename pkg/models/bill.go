@@ -29,7 +29,7 @@ func GetBills(user_id int, mybills *[]types.MyBills) error {
 
 func PaidbyUser(billpay *types.BillPay, user_id int) error {
 	query := `SELECT total_cost FROM Orders WHERE order_id = ?`
-	var initial_cost int
+	var initial_cost uint
 	err := DB.QueryRow(query, billpay.OrderId).Scan(&initial_cost)
 	fmt.Println(initial_cost)
 	if err != nil {

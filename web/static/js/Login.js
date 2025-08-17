@@ -3,6 +3,7 @@ const pwd_field = document.getElementById("password");
 const mobileOption = document.getElementById('mobile_option');
 const emailOption = document.getElementById('email_option');
 const identifierInput = document.getElementById('identifier');
+const identifierLabel = document.getElementById('identifier-label');
 
 toggle_show.addEventListener("change", () => {
     pwd_field.type = toggle_show.checked ? "text" : "password";
@@ -12,11 +13,14 @@ function updateIdentifierField() {
     if (mobileOption.checked) {
         identifierInput.placeholder = "Enter your mobile number";
         identifierInput.type = "tel";
-        identifierInput.pattern = "\\d{10}"
+        identifierInput.pattern = "\\d{10}";
+        identifierLabel.innerText = "Mobile Number";
     } 
     else if (emailOption.checked) {
         identifierInput.placeholder = "Enter your email address";
         identifierInput.type = "email";
+        identifierInput.removeAttribute("pattern");
+        identifierLabel.innerText = "Email Id";
     }
 }
 mobileOption.addEventListener('change', updateIdentifierField);

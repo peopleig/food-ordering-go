@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"unicode/utf8"
 
 	"github.com/peopleig/food-ordering-go/pkg/cache"
 	"github.com/peopleig/food-ordering-go/pkg/config"
@@ -15,7 +16,7 @@ import (
 
 func MenuHandler(w http.ResponseWriter, r *http.Request) {
 	user_id := r.Context().Value("user_id").(int)
-	// role := r.Context().Value("role").(string)
+	role := r.Context().Value("role").(string)
 	switch r.Method {
 	case http.MethodGet:
 		err := cache.LoadMenu()
@@ -41,6 +42,7 @@ func MenuHandler(w http.ResponseWriter, r *http.Request) {
 			Bills:      myBills,
 			Items:      config.MenuCache,
 			Categories: categories,
+			Role:       role,
 		}
 		utils.RenderTemplate(w, "menu", data)
 
@@ -50,6 +52,10 @@ func MenuHandler(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			fmt.Println(err)
 			http.Error(w, "Incorrect Cart data sent", http.StatusBadRequest)
+			return
+		}
+		if utf8.RuneCountInString(order.Special_instructions) > 50 {
+			http.Error(w, "Too long. Make a shorter instruction", http.StatusBadRequest)
 			return
 		}
 		if order.Order_type != "dine_in" && order.Order_type != "takeaway" {
@@ -65,8 +71,8 @@ func MenuHandler(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 		}
-		if order.Order_type == "takeaway" {
-			table_number = 0
+		if table_number > 20 || table_number < 0 {
+			http.Error(w, "Table number out off bounds", http.StatusBadRequest)
 		}
 		cache.LoadMenu()
 		err = models.CreateNewOrder(&order, table_number, user_id)

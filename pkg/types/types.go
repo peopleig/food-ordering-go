@@ -12,14 +12,14 @@ type NewUser struct {
 }
 
 type Item struct {
-	Item_id       int     `json:"item_id"`
-	Item_name     string  `json:"item_name"`
-	Category_name string  `json:"category_name"`
-	Price         float32 `json:"price"`
-	Description   string  `json:"description"`
-	Item_img      string  `json:"item_img_url"`
-	Is_veg        bool    `json:"is_veg"`
-	Spice_level   int     `json:"spice_level"`
+	Item_id       int    `json:"item_id"`
+	Item_name     string `json:"item_name"`
+	Category_name string `json:"category_name"`
+	Price         uint   `json:"price"`
+	Description   string `json:"description"`
+	Item_img      string `json:"item_img_url"`
+	Is_veg        bool   `json:"is_veg"`
+	Spice_level   int    `json:"spice_level"`
 }
 
 type MenuData struct {
@@ -27,6 +27,7 @@ type MenuData struct {
 	Bills      []MyBills
 	Items      map[int]Item
 	Categories []Categories
+	Role       string
 }
 
 type GroupedData struct {
@@ -43,9 +44,9 @@ type OrderRequest struct {
 
 type CartItem struct {
 	Item_name string `json:"itemName"`
-	Quantity  int    `json:"quantity"`
+	Quantity  uint   `json:"quantity"`
 	Item_id   int    `json:"itemId"`
-	Price     int    `json:"price"`
+	Price     uint   `json:"price"`
 }
 
 type Categories struct {
@@ -58,6 +59,7 @@ type GetAddDishData struct {
 	Categories []Categories `json:"categories"`
 	Error      bool         `json:"error"`
 	Message    string       `json:"message"`
+	Role       string       `json:"role"`
 }
 
 type ChefAssignRequest struct {
@@ -70,13 +72,14 @@ type OrdersData struct {
 	Title  string    `json:"title"`
 	Items  []Ordered `json:"items"`
 	UserId int       `json:"user_id"`
+	Role   string    `json:"role"`
 }
 
 type Ordered struct {
 	OrderId      int    `json:"order_id"`
 	ItemId       int    `json:"item_id"`
 	ItemName     string `json:"item_name"`
-	Quantity     int    `json:"quantity"`
+	Quantity     uint   `json:"quantity"`
 	ChefId       int    `json:"chef_id"`
 	ChefName     string `json:"chef_name"`
 	Instructions string `json:"instructions"`
@@ -91,6 +94,7 @@ type AdminData struct {
 	Uausers []UnApprovedUser `json:"uauser"`
 	Show    bool             `json:"show"`
 	Message string           `json:"message"`
+	Role    string           `json:"role"`
 }
 
 type Order struct {
@@ -102,33 +106,33 @@ type Order struct {
 }
 
 type BillOrder struct {
-	OrderId      int     `json:"order_id"`
-	UserId       int     `json:"user_id"`
-	UserName     string  `json:"name"`
-	Status       string  `json:"status"`
-	OrderType    string  `json:"order_type"`
-	TableNumber  int     `json:"table_number"`
-	Instructions string  `json:"instructions"`
-	TotalCost    float32 `json:"total_cost"`
+	OrderId      int    `json:"order_id"`
+	UserId       int    `json:"user_id"`
+	UserName     string `json:"name"`
+	Status       string `json:"status"`
+	OrderType    string `json:"order_type"`
+	TableNumber  int    `json:"table_number"`
+	Instructions string `json:"instructions"`
+	TotalCost    uint   `json:"total_cost"`
 }
 
 type CompleteBill struct {
-	OrderId      int     `json:"order_id"`
-	UserId       int     `json:"user_id"`
-	UserName     string  `json:"name"`
-	Status       string  `json:"status"`
-	OrderType    string  `json:"order_type"`
-	TableNumber  int     `json:"table_number"`
-	Instructions string  `json:"instructions"`
-	TotalCost    float32 `json:"total_cost"`
-	AmtPaid      float32 `json:"amt_paid"`
-	TipPaid      float32 `json:"tip_paid"`
+	OrderId      int    `json:"order_id"`
+	UserId       int    `json:"user_id"`
+	UserName     string `json:"name"`
+	Status       string `json:"status"`
+	OrderType    string `json:"order_type"`
+	TableNumber  int    `json:"table_number"`
+	Instructions string `json:"instructions"`
+	TotalCost    uint   `json:"total_cost"`
+	AmtPaid      uint   `json:"amt_paid"`
+	TipPaid      uint   `json:"tip_paid"`
 }
 
 type OrderContents struct {
-	ItemName string  `json:"item_name"`
-	Price    float32 `json:"price"`
-	Quantity int     `json:"quantity"`
+	ItemName string `json:"item_name"`
+	Price    uint   `json:"price"`
+	Quantity uint   `json:"quantity"`
 }
 
 type FinalBill struct {
@@ -137,18 +141,20 @@ type FinalBill struct {
 	Order    CompleteBill    `json:"order"`
 	Show     bool            `json:"show"`
 	Message  string          `json:"message"`
+	Role     string          `json:"role"`
 }
 
 type SingleBill struct {
 	Title    string          `json:"title"`
 	Order    BillOrder       `json:"order"`
 	Contents []OrderContents `json:"contents"`
+	Role     string          `json:"role"`
 }
 
 type MyBills struct {
 	OrderId int    `json:"order_id"`
 	Status  string `json:"status"`
-	Price   int    `json:"price"`
+	Price   uint   `json:"price"`
 }
 
 type UnApprovedUser struct {
@@ -163,8 +169,8 @@ type BillData struct {
 }
 
 type BillPay struct {
-	Tip     int `json:"tip"`
-	OrderId int `json:"order_id"`
+	Tip     uint `json:"tip"`
+	OrderId int  `json:"order_id"`
 }
 
 type LoginData struct {
@@ -176,10 +182,10 @@ type LoginData struct {
 type NewDish struct {
 	DishName    string `schema:"dish_name"`
 	Category    string `schema:"category"`
-	Price       string `schema:"price"`
+	Price       uint   `schema:"price"`
 	Description string `schema:"description"`
-	IsVeg       string `schema:"is_veg"`
-	SpiceLevel  string `schema:"spice_level"`
+	IsVeg       bool   `schema:"is_veg"`
+	SpiceLevel  int    `schema:"spice_level"`
 }
 
 type ErrorPageData struct {
