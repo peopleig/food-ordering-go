@@ -17,7 +17,7 @@ func BillHandler(w http.ResponseWriter, r *http.Request) {
 	var mybills []types.MyBills
 	err := models.GetBills(user_id, &mybills)
 	if err != nil {
-		http.Error(w, "error finding your bills", http.StatusInternalServerError)
+		http.Redirect(w, r, "/error?error=internal", http.StatusSeeOther)
 		return
 	}
 	data := types.BillData{
@@ -74,13 +74,15 @@ func SingleBillHandler(w http.ResponseWriter, r *http.Request) {
 	case "preparing", "payment_pending":
 		err := models.GetSingleBill(orderId, &Contents, &billOrder)
 		if err != nil {
-			http.Error(w, "couldn't access DB", http.StatusInternalServerError)
+			fmt.Println(err)
+			http.Redirect(w, r, "/error?error=internal", http.StatusSeeOther)
 			return
 		}
 	case "completed":
 		err := models.GetFinalBill(orderId, &Contents, &completeBill)
 		if err != nil {
-			http.Error(w, "couldn't access DB", http.StatusInternalServerError)
+			fmt.Println(err)
+			http.Redirect(w, r, "/error?error=internal", http.StatusSeeOther)
 			return
 		}
 	default:

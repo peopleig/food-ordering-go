@@ -22,19 +22,21 @@ func MenuHandler(w http.ResponseWriter, r *http.Request) {
 		err := cache.LoadMenu()
 		if err != nil {
 			fmt.Println(err)
-			http.Error(w, "Unable to access the menu", http.StatusInternalServerError)
+			http.Redirect(w, r, "/error?error=internal", http.StatusSeeOther)
 			return
 		}
 		var myBills []types.MyBills
 		err = models.GetBills(user_id, &myBills)
 		if err != nil {
-			http.Error(w, "error finding your bills", http.StatusInternalServerError)
+			fmt.Println(err)
+			http.Redirect(w, r, "/error?error=internal", http.StatusSeeOther)
 			return
 		}
 		var categories []types.Categories
 		err = models.GetAllCategories(&categories)
 		if err != nil {
-			http.Error(w, "unable to fetch all categories", http.StatusInternalServerError)
+			fmt.Println(err)
+			http.Redirect(w, r, "/error?error=internal", http.StatusSeeOther)
 			return
 		}
 		data := types.MenuData{
@@ -67,7 +69,8 @@ func MenuHandler(w http.ResponseWriter, r *http.Request) {
 			table_number = 0
 		} else {
 			if err != nil {
-				http.Error(w, "Error in parsing table number data", http.StatusInternalServerError)
+				fmt.Println(err)
+				http.Redirect(w, r, "/error?error=internal", http.StatusSeeOther)
 				return
 			}
 		}
@@ -78,7 +81,7 @@ func MenuHandler(w http.ResponseWriter, r *http.Request) {
 		err = models.CreateNewOrder(&order, table_number, user_id)
 		if err != nil {
 			fmt.Println(err)
-			http.Error(w, "Error in Creating Order", http.StatusInternalServerError)
+			http.Redirect(w, r, "/error?error=internal", http.StatusSeeOther)
 			return
 		}
 		w.Header().Set("Content-Type", "application/json")

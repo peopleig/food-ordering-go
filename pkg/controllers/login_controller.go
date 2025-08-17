@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"database/sql"
+	"fmt"
 	"net/http"
 	"strconv"
 	"time"
@@ -59,7 +60,9 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 				utils.RenderTemplate(w, "login", data)
 				return
 			} else {
-				http.Error(w, "Database error", http.StatusInternalServerError)
+				fmt.Println(err)
+				http.Redirect(w, r, "/error?error=internal", http.StatusSeeOther)
+				return
 			}
 		}
 

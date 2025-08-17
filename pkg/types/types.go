@@ -192,4 +192,5 @@ type ErrorPageData struct {
 	Title   string        `json:"title"`
 	Status  string        `json:"status"`
 	Message template.HTML `json:"message"`
+	Role    string        `json:"role"`
 }
