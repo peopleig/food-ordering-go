@@ -1,7 +1,6 @@
 package middleware
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -14,9 +13,8 @@ func AllowChefAccess(next http.Handler) http.Handler {
 		// user_id := r.Context().Value("user_id").(int)
 
 		role := r.Context().Value("role").(string)
-		fmt.Println(role)
 		if role != "chef" {
-			http.Error(w, "This is the chef's zone - Not for you!", http.StatusForbidden)
+			http.Redirect(w, r, "/error?error=chef", http.StatusSeeOther)
 			return
 		}
 		next.ServeHTTP(w, r)
@@ -29,9 +27,8 @@ func AllowAdminAccess(next http.Handler) http.Handler {
 		// user_id := r.Context().Value("user_id").(int)
 
 		role := r.Context().Value("role").(string)
-		fmt.Println(role)
 		if role != "admin" {
-			http.Error(w, "Admin's Playground. Not Yours. Bye bye!", http.StatusForbidden)
+			http.Redirect(w, r, "/error?error=admin", http.StatusSeeOther)
 			return
 		}
 		next.ServeHTTP(w, r)
@@ -50,7 +47,7 @@ func AllowAdminandIdAccess(next http.Handler) http.Handler {
 			http.Error(w, "error confirming user", http.StatusInternalServerError)
 		}
 		if role != "admin" && user_id != userId {
-			http.Error(w, "Admin's Playground. Not Yours. Bye bye!", http.StatusForbidden)
+			http.Redirect(w, r, "/error?error=bill", http.StatusSeeOther)
 			return
 		}
 		next.ServeHTTP(w, r)

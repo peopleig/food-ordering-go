@@ -47,7 +47,6 @@ func CreateNewOrder(order *types.OrderRequest, table_number int, user_id int) er
 	}
 
 	query = fmt.Sprintf(`INSERT INTO Ordered_Items (order_id, item_id, quantity) VALUES %s`, strings.Join(placeholders, ","))
-	fmt.Println(query)
 	_, err = DB.Exec(query, values...)
 	if err != nil {
 		_, err = DB.Exec(`DELETE FROM Orders WHERE order_id = ?`, order_id)

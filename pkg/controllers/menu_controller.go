@@ -26,12 +26,12 @@ func MenuHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		var myBills []types.MyBills
-		err = models.GetBills(user_id, &myBills)
-		if err != nil {
-			fmt.Println(err)
-			http.Redirect(w, r, "/error?error=internal", http.StatusSeeOther)
-			return
-		}
+		// err = models.GetBills(user_id, &myBills)
+		// if err != nil {
+		// 	fmt.Println(err)
+		// 	http.Redirect(w, r, "/error?error=internal", http.StatusSeeOther)
+		// 	return
+		// }
 		var categories []types.Categories
 		err = models.GetAllCategories(&categories)
 		if err != nil {
