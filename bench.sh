@@ -2,7 +2,6 @@
 
 source bench.env
 
-# curl -i -b "$COOKIE_FILE" "$BASE_URL/menu"
 echo "--------------------------------------------------"
 echo "Running GET /menu benchmark with cookies..."
 echo "--------------------------------------------------"
