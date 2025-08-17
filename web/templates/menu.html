@@ -56,14 +56,14 @@
             <button id="surprise-me-btn" class="btn btn-outline-warning mb-3">Surprise Me</button>
             <div id="surprise-popup" class="position-fixed top-50 start-50 translate-middle bg-white p-4 shadow rounded d-none z-3" style="min-width: 300px;">
                 <h5 class="mb-3">How many people?</h5>
-                <input type="number" id="people-count" class="form-control mb-3" min="1" placeholder="Enter number of people">
+                <input type="number" id="people-count" class="form-control mb-3" min="1" max="10" placeholder="Enter number of people">
                 <div class="d-flex justify-content-between">
                     <button id="cancel-surprise" class="btn btn-secondary btn-sm">Cancel</button>
                     <button id="generate-surprise" class="btn btn-success btn-sm">Surprise Me!</button>
                 </div>
             </div>
             <div class="order-options">   
-                <textarea class="form-control" id="specialInstructions" name="description" rows="3" required placeholder="Any special requests?"></textarea>
+                <textarea class="form-control" id="specialInstructions" name="description" rows="3" maxlength="50" required placeholder="Any special requests?"></textarea>
                 <select id="orderType">
                     <option value="dine_in">Dine-In</option>
                     <option value="takeaway">Takeaway</option>

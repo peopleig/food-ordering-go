@@ -7,13 +7,10 @@ import (
 	"github.com/peopleig/food-ordering-go/pkg/types"
 )
 
-func CalculateTotal(cart []types.CartItem) (float32, error) {
-	var total float32
+func CalculateTotal(cart []types.CartItem) (uint, error) {
+	var total uint
 	for _, item := range cart {
-		if item.Quantity <= 0 {
-			return -1, nil
-		}
-		total += config.MenuCache[item.Item_id].Price * float32(item.Quantity)
+		total += config.MenuCache[item.Item_id].Price * (item.Quantity)
 	}
 	return total, nil
 }

@@ -16,6 +16,12 @@ func AddDishErrors(errorMsg string) (bool, string) {
 	case "dish":
 		showToast = true
 		message = "Dish with such a name already exists!"
+	case "len":
+		showToast = true
+		message = "Description is too long"
+	case "spice":
+		showToast = true
+		message = "Spice level out of bounds"
 	}
 	return showToast, message
 }

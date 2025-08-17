@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS Items (
     item_id BIGINT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     item_name VARCHAR(255),
     category_id BIGINT,
-    price FLOAT,
+    price INT UNSIGNED,
     description TEXT,
     item_image_url VARCHAR(255),
     is_veg BOOLEAN,

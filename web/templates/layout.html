@@ -12,13 +12,31 @@
 <body>
     <div class="page-container">
         <header class="header">
-            <img src="static/images/trident.svg" id="logo">
-            <h1 class="mt-2">Neptune's Kitchen</h1>
-            <form action="/logout" method="POST" class="ms-3">
-                <button class="btn btn-outline-danger btn-sm d-flex align-items-center loggingout">
-                    <i class="fas fa-sign-out-alt me-2" id="logout"></i>
-                </button>
-            </form>
+            <div class="navbar-div">
+                <img src="static/images/trident.svg" id="logo">
+                <h1 class="mt-2">Neptune's Kitchen</h1>
+            </div>
+            <div class="navbar-div end">
+                <h3 class="mt-2 me-4 pb-1" id="role">
+                    {{if eq .Role "admin"}}
+                        <a href="/admin">Admin</a>
+                    {{end}}
+                    {{if eq .Role "chef"}}
+                        <a href="/chef">Chef</a>
+                    {{end}}
+                    {{if eq .Role "customer"}}
+                        <a href="/menu">Customer</a>
+                    {{end}}
+                    {{if and (ne .Role "admin") (ne .Role "chef") (ne .Role "customer")}}
+                        <a href="/">Guest</a>
+                    {{end}}
+                </h3>
+                <form action="/logout" method="POST" class="ms-3 mt-2">
+                    <button class="btn btn-outline-danger btn-sm d-flex align-items-center loggingout">
+                        <i class="fas fa-sign-out-alt me-2" id="logout"></i>
+                    </button>
+                </form>
+            </div>
         </header>
 
         <main class="content">

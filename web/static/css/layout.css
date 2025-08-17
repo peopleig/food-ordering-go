@@ -27,6 +27,28 @@ html, body {
     align-items: center;
 }
 
+.navbar-div {
+    display: flex;
+    flex-direction: row;
+}
+
+#role {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+#role:hover {
+  transform: translateY(-5px);
+  cursor: pointer;
+}
+
+#role a {
+    text-decoration: none;
+    color: #D6EEB7;
+}
+.end {
+    position: absolute;
+    right: 2rem;
+}
+
 #logo{
     height: 4rem !important;
     margin-right: 1rem;
@@ -48,10 +70,6 @@ i {
     color: #040403;
 }
 
-.ms-3 {
-    position: absolute;
-    right: 2rem;
-}
 .loggingout {
     width: auto;
     background-color: #D6EEB7;

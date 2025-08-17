@@ -6,6 +6,10 @@ import (
 	"net/http"
 )
 
+func multiply(a uint, b uint) uint {
+	return a * b
+}
+
 func RenderTemplate(w http.ResponseWriter, tmplName string, data interface{}) {
 	tmpl, err := template.ParseFiles(
 		"web/templates/layout.html",
@@ -24,7 +28,7 @@ func RenderTemplate(w http.ResponseWriter, tmplName string, data interface{}) {
 }
 
 func RenderTwoTemplates(w http.ResponseWriter, tmplName1 string, tmplName2 string, data interface{}) {
-	tmpl, err := template.ParseFiles(
+	tmpl, err := template.New("base").Funcs(template.FuncMap{"mul": multiply}).ParseFiles(
 		"web/templates/layout.html",
 		"web/templates/"+tmplName1+".html",
 		"web/templates/"+tmplName2+".html",
@@ -35,8 +39,9 @@ func RenderTwoTemplates(w http.ResponseWriter, tmplName1 string, tmplName2 strin
 		return
 	}
 
-	err = tmpl.Execute(w, data)
+	err = tmpl.ExecuteTemplate(w, "layout.html", data)
 	if err != nil {
+		fmt.Println(err)
 		http.Error(w, "Error executing template", http.StatusInternalServerError)
 	}
 }

@@ -9,6 +9,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	"unicode/utf8"
 
 	"github.com/gorilla/mux"
 	"github.com/gorilla/schema"
@@ -54,6 +55,7 @@ func AdminHandler(w http.ResponseWriter, r *http.Request) {
 		Uausers: uausers,
 		Show:    show,
 		Message: message,
+		Role:    "admin",
 	}
 	utils.RenderTemplate(w, "admin", data)
 
@@ -103,10 +105,35 @@ func AdminDishHandler(w http.ResponseWriter, r *http.Request) {
 			Categories: categories,
 			Error:      showToast,
 			Message:    message,
+			Role:       "admin",
 		}
 		utils.RenderTemplate(w, "add_dish", data)
 	case http.MethodPost:
 		r.ParseMultipartForm(10 << 20)
+		//All the other fields I will check first
+		var newDish types.NewDish
+		if err := decoder.Decode(&newDish, r.PostForm); err != nil {
+			http.Redirect(w, r, "/admin/dish?error=server", http.StatusSeeOther)
+			return
+		}
+		if utf8.RuneCountInString(newDish.Description) > 100 {
+			http.Redirect(w, r, "/admin/dish?error=len", http.StatusSeeOther)
+			return
+		}
+		if newDish.Price > 9999 {
+			http.Error(w, "price out of bounds!", http.StatusBadRequest)
+			return
+		}
+		dishExists := utils.DishExists(newDish.DishName)
+		if dishExists {
+			http.Redirect(w, r, "/admin/dish?error=dish", http.StatusSeeOther)
+			return
+		}
+		if newDish.SpiceLevel > 5 || newDish.SpiceLevel < -5 {
+			http.Redirect(w, r, "/admin/dish?error=spice", http.StatusSeeOther)
+			return
+		}
+		//Now the file
 		file, header, err := r.FormFile("image")
 		if err != nil {
 			http.Error(w, "Error retrieving the file", http.StatusInternalServerError)
@@ -119,9 +146,8 @@ func AdminDishHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		milli := strconv.FormatInt(time.Now().UnixMilli(), 10)
-		gen_name := milli + header.Filename
-		url := "static/images/" + gen_name
-		dest, err := os.Create("./web/static/images/" + gen_name)
+		url := "static/images/" + milli + ext
+		dest, err := os.Create("./web/static/images/" + milli + ext)
 		if err != nil {
 			fmt.Println("Unable to create file: ", err)
 			http.Redirect(w, r, "/admin/dish?error=server", http.StatusSeeOther)
@@ -134,31 +160,7 @@ func AdminDishHandler(w http.ResponseWriter, r *http.Request) {
 			http.Redirect(w, r, "/admin/dish?error=server", http.StatusSeeOther)
 			return
 		}
-		var newDish types.NewDish
-		if err := decoder.Decode(&newDish, r.PostForm); err != nil {
-			http.Redirect(w, r, "/admin/dish?error=server", http.StatusSeeOther)
-			return
-		}
-		dishExists := utils.DishExists(newDish.DishName)
-		if dishExists {
-			http.Redirect(w, r, "/admin/dish?error=dish", http.StatusSeeOther)
-			return
-		}
-		var isVeg bool
-		switch newDish.IsVeg {
-		case "1":
-			isVeg = true
-		case "0":
-			isVeg = false
-		default:
-			fmt.Println("Incorrect form data")
-			http.Redirect(w, r, "/admin/dish?error=req", http.StatusSeeOther)
-			return
-		}
-		price64, _ := strconv.ParseFloat(newDish.Price, 32)
-		price32 := float32(price64)
-		spiceLevel, _ := strconv.Atoi(newDish.SpiceLevel)
-		err = models.AddDish(newDish, price32, isVeg, url, spiceLevel)
+		err = models.AddDish(newDish, url)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return

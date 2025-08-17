@@ -90,7 +90,7 @@ func GetAllCategories(categories *[]types.Categories) error {
 	return rows.Err()
 }
 
-func AddDish(newDish types.NewDish, price float32, isVeg bool, url string, spiceLevel int) error {
+func AddDish(newDish types.NewDish, url string) error {
 	var categoryID int
 	query := `SELECT category_id FROM Categories WHERE category_name = ?`
 	err := DB.QueryRow(query, newDish.Category).Scan(&categoryID)
@@ -104,7 +104,7 @@ func AddDish(newDish types.NewDish, price float32, isVeg bool, url string, spice
 	}
 	query = `INSERT INTO Items(item_name, category_id, price, description, item_image_url, is_veg, spice_level) 
 	VALUES (?,?,?,?,?,?,?)`
-	_, err = DB.Exec(query, newDish.DishName, categoryID, price, newDish.Description, url, isVeg, spiceLevel)
+	_, err = DB.Exec(query, newDish.DishName, categoryID, newDish.Price, newDish.Description, url, newDish.IsVeg, newDish.SpiceLevel)
 	if err != nil {
 		return err
 	}
