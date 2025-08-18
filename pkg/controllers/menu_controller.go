@@ -19,23 +19,10 @@ func MenuHandler(w http.ResponseWriter, r *http.Request) {
 	role := r.Context().Value("role").(string)
 	switch r.Method {
 	case http.MethodGet:
-		err := cache.LoadMenu()
-		if err != nil {
-			fmt.Println(err)
-			http.Redirect(w, r, "/error?error=internal", http.StatusSeeOther)
-			return
-		}
-		var categories []types.Categories
-		err = models.GetAllCategories(&categories)
-		if err != nil {
-			fmt.Println(err)
-			http.Redirect(w, r, "/error?error=internal", http.StatusSeeOther)
-			return
-		}
 		data := types.MenuData{
 			Title:      "Menu",
 			Items:      config.MenuCache,
-			Categories: categories,
+			Categories: config.CategoryCache,
 			Role:       role,
 		}
 		utils.RenderTemplate(w, "menu", data)

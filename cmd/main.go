@@ -27,6 +27,10 @@ func main() {
 	if err != nil {
 		fmt.Println("It will load later, then!")
 	}
+	err = cache.LoadCategory()
+	if err != nil {
+		fmt.Println("Category will be loaded later then!")
+	}
 	router := api.Run()
 	server := &http.Server{
 		Addr:    ":8001",

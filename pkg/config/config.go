@@ -11,6 +11,8 @@ import (
 
 var MenuCache = make(map[int]types.Item)
 var MenuCacheLoaded bool
+var CategoryCache []types.Categories
+var CategoryCacheLoaded bool
 
 type DBConfig struct {
 	User     string
