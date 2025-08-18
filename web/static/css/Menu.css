@@ -1,7 +1,6 @@
 .container {
     max-width: 90vw;
     margin: auto;
-    padding: 1.5rem;
     font-family: 'Segoe UI', sans-serif;
 }
 .main {
@@ -167,6 +166,10 @@ h2 {
 .overflow-auto::-webkit-scrollbar-thumb {
     background: #ccc;
     border-radius: 3px;
+}
+
+.bill-redirect {
+    font-size: medium;
 }
 
 

@@ -62,6 +62,7 @@ func CreateNewUser(new_user *types.NewUser) (bool, string, int64, error) {
 func CheckForUser(orderId int) (int, error) {
 	query := `SELECT user_id FROM Orders WHERE order_id = ?`
 	var userId int
+	fmt.Println(orderId)
 	err := DB.QueryRow(query, orderId).Scan(&userId)
 	if err != nil {
 		fmt.Println(err)

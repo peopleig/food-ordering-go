@@ -24,7 +24,6 @@ type Item struct {
 
 type MenuData struct {
 	Title      string
-	Bills      []MyBills
 	Items      map[int]Item
 	Categories []Categories
 	Role       string
@@ -191,4 +190,19 @@ type ErrorPageData struct {
 	Status  string        `json:"status"`
 	Message template.HTML `json:"message"`
 	Role    string        `json:"role"`
+}
+
+type ShortBillForm struct {
+	OrderId     int    `json:"order_id"`
+	Status      string `json:"status"`
+	TotalCost   uint   `json:"total_cost"`
+	TableNumber int    `json:"table_number"`
+	OrderType   string `json:"order_type"`
+}
+
+type ShortBillData struct {
+	Title      string          `json:"title"`
+	ShortBills []ShortBillForm `json:"short_bills"`
+	Role       string          `json:"role"`
+	Show       bool            `json:"show"`
 }

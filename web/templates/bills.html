@@ -1,0 +1,64 @@
+{{define "content"}}
+<div class="container">
+    <a href="/menu" class="btn btn-sm btn-success mb-3 menu-redirect">Menu</a>
+    <h3>Your Orders</h3>
+    <div class="d-flex gap-1 mb-3">
+        <button class="btn btn-outline-primary order-filter active" data-status="all">All</button>
+        <button class="btn btn-outline-success order-filter" data-status="preparing">Preparing</button>
+        <button class="btn btn-outline-warning order-filter" data-status="payment_pending">Payment Pending</button>
+        <button class="btn btn-outline-secondary order-filter" data-status="completed">Completed</button>
+    </div>
+    <div class="orders">
+        {{range .ShortBills}}
+            <div class="orders-card card d-inline-block me-3 p-3 mb-3 mt-3 
+            {{if eq .Status "preparing"}}preparing-border{{end}} 
+            {{if eq .Status "payment_pending"}}pending-border{{end}}
+            {{if eq .Status "completed"}}completed-border{{end}}" 
+            data-status="{{.Status}}">
+                <h5 class="mb-2">#{{.OrderId}}</h5>
+                {{if eq .OrderType "dine_in"}}
+                    <p class="mb-2"><b>Table No: </b>{{.TableNumber}}</p>
+                {{end}}
+                <p class="mb-2 cost">₹{{.TotalCost}}</p>
+                <p class="mb-2">
+                    {{if eq .OrderType "dine_in"}}
+                       🍴 Dine In
+                    {{else}}
+                        🥡 Takeaway
+                    {{end}}
+                </p>
+                <p class="mb-2">
+                    {{if eq .Status "preparing"}}
+                        <div class="blinking green"></div><span class="preparing">  Preparing</span>
+                    {{end}}
+                    {{if eq .Status "payment_pending"}}
+                        <div class="blinking yellow"></div><span class="pending">  Payment Pending</span>
+                    {{end}}
+                    {{if eq .Status "completed"}}
+                        <div class="blinking grey"></div><span class="completed">  Completed</span>
+                    {{end}}
+                </p>
+                <a href="/bill/{{.Status}}/{{.OrderId}}" class="btn btn-sm btn-primary" target="_blank">
+                    {{if eq .Status "payment_pending"}}
+                        Pay Bill
+                    {{else}}
+                        View Bill
+                    {{end}}
+                </a>
+            </div>
+        {{end}}
+    </div>
+</div>
+{{if .Show}}
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 9999;">
+    <div class="toast custom-toast show" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex toast-cover">
+            <div class="toast-body">
+                You still have unpaid/ongoing orders. Please complete your orders before logging out
+            </div>
+            <button type="button" class="btn-close btn-close-black me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+{{end}}
+{{end}}

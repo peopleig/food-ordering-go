@@ -116,3 +116,21 @@ func GetFinalBill(orderId int, contents *[]types.OrderContents, completeBill *ty
 	}
 	return rows.Err()
 }
+
+func GetShortBills(userId int, myBills *[]types.ShortBillForm) error {
+	selectQuery := `SELECT order_id, status, total_cost, table_number, order_type FROM Orders WHERE user_id = ?`
+	rows, err := DB.Query(selectQuery, userId)
+	if err != nil {
+		return err
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var content types.ShortBillForm
+		err := rows.Scan(&content.OrderId, &content.Status, &content.TotalCost, &content.TableNumber, &content.OrderType)
+		if err != nil {
+			return err
+		}
+		*myBills = append(*myBills, content)
+	}
+	return rows.Err()
+}

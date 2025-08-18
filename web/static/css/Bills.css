@@ -1,0 +1,105 @@
+.container {
+    max-height: 77vh;
+    overflow-y: auto;
+}
+
+.blinking {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 100%;
+}
+
+.green {
+    background-color: rgb(11, 177, 11);
+    animation: blink-green 1.5s infinite;
+}
+.yellow {
+    background-color: rgb(199, 199, 4);
+    animation: blink-yellow 1.5s infinite;
+}
+
+.grey {
+    background-color: grey;
+}
+
+.preparing {
+    color: rgb(11, 177, 11);
+    font-weight: bolder;
+    animation: blink-green 1.5s infinite;
+}
+
+.pending {
+    color: rgb(199, 199, 4);
+    font-weight: bolder;
+    animation: blink-yellow 1.5s infinite;
+}
+
+.completed {
+    color: grey;
+    font-weight: bolder;
+}
+
+@keyframes blink-green {
+  0%, 100% {
+    opacity: 0;
+    color: rgb(11, 177, 11);
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes blink-yellow {
+  0%, 100% {
+    opacity: 0;
+    color: rgb(199, 199, 4);
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+
+.card-body {
+    padding: 1rem;
+}
+
+.orders-card {
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    width: 15rem;
+    height: auto;
+}
+
+.preparing-border{
+    border-left: 10px rgb(13, 209, 13) solid;
+}
+
+.pending-border {
+    border-left: 10px yellow solid;
+}
+
+.completed-border{
+    border-left: 10px grey solid;
+}
+
+
+.menu-redirect {
+    font-size: medium;
+}
+
+.position-fixed.bottom-0.end-0.p-3{
+    z-index: 101;
+}
+.toast-body, .toast-cover{
+    background-color: #D6EEB7;
+    color: #021945;
+}
+.redirect {
+    font-size: small;
+    border: none;
+    margin-top: 1rem;
+    color: #D6EEB7;
+}
+

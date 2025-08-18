@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -44,6 +45,7 @@ func AllowAdminandIdAccess(next http.Handler) http.Handler {
 		orderId, _ := strconv.Atoi(vars["order_id"])
 		userId, err := models.CheckForUser(orderId)
 		if err != nil {
+			fmt.Println(err)
 			http.Error(w, "error confirming user", http.StatusInternalServerError)
 		}
 		if role != "admin" && user_id != userId {

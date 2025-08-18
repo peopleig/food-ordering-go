@@ -27,6 +27,29 @@ func BillHandler(w http.ResponseWriter, r *http.Request) {
 	utils.RenderTemplate(w, "bill", data)
 }
 
+func GetMyBills(w http.ResponseWriter, r *http.Request) {
+	unPaid := r.URL.Query().Get("error")
+	user_id := r.Context().Value("user_id").(int)
+	role := r.Context().Value("role").(string)
+	show := false
+	if unPaid == "unpaid" {
+		show = true
+	}
+	var myBills []types.ShortBillForm
+	err := models.GetShortBills(user_id, &myBills)
+	if err != nil {
+		http.Redirect(w, r, "/error?error=internal", http.StatusSeeOther)
+		return
+	}
+	data := types.ShortBillData{
+		Title:      "Bills",
+		ShortBills: myBills,
+		Role:       role,
+		Show:       show,
+	}
+	utils.RenderTemplate(w, "bills", data)
+}
+
 func BillPayerHandler(w http.ResponseWriter, r *http.Request) {
 	user_id := r.Context().Value("user_id").(int)
 	var billpay types.BillPay
