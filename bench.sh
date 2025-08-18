@@ -7,7 +7,7 @@ echo "Running GET /menu benchmark with cookies..."
 echo "--------------------------------------------------"
 ab -n 100000 -c 1000 \
   -C "jwt_token=$(grep token $COOKIE_FILE | awk '{print $NF}')" \
-  "$BASE_URL/menu"
+  "$BASE_URL/api/menu"
 
 echo "--------------------------------------------------"
 echo "Running POST /menu benchmark with cookies..."

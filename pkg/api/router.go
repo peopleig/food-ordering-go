@@ -27,6 +27,7 @@ func SetupRouter() *mux.Router {
 	protected.Use(middleware.JWTMiddleware)
 
 	protected.HandleFunc("/menu", controllers.MenuHandler).Methods("GET", "POST")
+	protected.HandleFunc("/api/menu", controllers.ApiMenuHandler).Methods("GET")
 
 	chefRouter := protected.PathPrefix("/chef").Subrouter()
 	chefRouter.Use(middleware.AllowChefAccess)

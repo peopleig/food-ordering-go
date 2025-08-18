@@ -1,6 +1,9 @@
 package cache
 
 import (
+	"encoding/json"
+	"fmt"
+
 	"github.com/peopleig/food-ordering-go/pkg/config"
 	"github.com/peopleig/food-ordering-go/pkg/models"
 	"github.com/peopleig/food-ordering-go/pkg/types"
@@ -13,6 +16,12 @@ func LoadMenu() error {
 			return err
 		}
 		config.MenuCache = items
+		jsonData, err := json.Marshal(config.MenuCache)
+		if err != nil {
+			fmt.Println("Error marshaling JSON:", err)
+			return err
+		}
+		config.JSONMenuCache = string(jsonData)
 		config.MenuCacheLoaded = true
 	}
 	return nil
