@@ -1,21 +1,14 @@
 .content {
     flex: 1;
     display: flex;
-    justify-content: center;
+    /* justify-content: center; */
     align-items: center;
-    background-color: black;
+    background-color: #0c0d0d;
     overflow: hidden;
     position: relative;
-}
-.content {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: black;
-    background-image: url('/static/images/cookie.jpg');
+    background-image: url('/static/images/bgg.jpg');
     background-repeat: no-repeat;
-    background-position: -10rem center;
+    background-position: 120% center;
     background-size: contain;
 }
 
@@ -28,8 +21,6 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
-
     padding: 2rem;
     box-sizing: border-box;
 }
@@ -38,7 +29,8 @@
     color: white;
     font-family: 'Metamorphous', serif;
     width: 90%;
-    text-align: center;
+    text-align: left;
+    font-size: large;
     margin-bottom: 2rem;
 }
 .btn.btn-primary {
