@@ -244,3 +244,19 @@ categoryFilter.addEventListener("change", () => {
     });
 });
 
+document.addEventListener("DOMContentLoaded", function () {
+    const orderTypeSelect = document.getElementById('orderType');
+    const tableNoInput = document.getElementById('tableNo');
+    function updateTableNo() {
+        if (orderTypeSelect.value === 'takeaway') {
+            tableNoInput.value = 0;
+            tableNoInput.disabled = true;
+        } else {
+            tableNoInput.disabled = false;
+            tableNoInput.value = '';
+        }
+    }
+    updateTableNo();
+    orderTypeSelect.addEventListener('change', updateTableNo);
+});
+

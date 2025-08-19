@@ -70,7 +70,6 @@ func MenuHandler(w http.ResponseWriter, r *http.Request) {
 
 func ApiMenuHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	if err := json.NewEncoder(w).Encode(config.JSONMenuCache); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-	}
+	w.WriteHeader(http.StatusOK)
+	w.Write(config.ByteMenuCache)
 }

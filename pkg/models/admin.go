@@ -8,7 +8,10 @@ import (
 )
 
 func GetAllOrders(orders *[]types.Order) error {
-	query := `SELECT order_id, user_id, order_type, table_number, status FROM Orders ORDER BY order_id;`
+	query := `SELECT o.order_id, o.user_id, o.order_type, o.table_number, o.status, p.payment_status
+	FROM Orders o
+	LEFT JOIN Payment p ON o.order_id = p.order_id
+	ORDER BY o.order_id;`
 	rows, err := DB.Query(query)
 	if err != nil {
 		return err
@@ -17,7 +20,7 @@ func GetAllOrders(orders *[]types.Order) error {
 
 	for rows.Next() {
 		var ordered types.Order
-		err := rows.Scan(&ordered.OrderId, &ordered.UserId, &ordered.Order_type, &ordered.Table_number, &ordered.Status)
+		err := rows.Scan(&ordered.OrderId, &ordered.UserId, &ordered.Order_type, &ordered.Table_number, &ordered.Status, &ordered.PaymentStatus)
 		if err != nil {
 			return err
 		}
@@ -105,6 +108,20 @@ func AddDish(newDish types.NewDish, url string) error {
 	query = `INSERT INTO Items(item_name, category_id, price, description, item_image_url, is_veg, spice_level) 
 	VALUES (?,?,?,?,?,?,?)`
 	_, err = DB.Exec(query, newDish.DishName, categoryID, newDish.Price, newDish.Description, url, newDish.IsVeg, newDish.SpiceLevel)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func ValidateBillPayment(orderId int) error {
+	query := `UPDATE Payment SET payment_status = 'paid' WHERE order_id = ?`
+	_, err := DB.Exec(query, orderId)
+	if err != nil {
+		return err
+	}
+	query = `UPDATE Orders SET status = 'completed' WHERE order_id = ?`
+	_, err = DB.Exec(query, orderId)
 	if err != nil {
 		return err
 	}

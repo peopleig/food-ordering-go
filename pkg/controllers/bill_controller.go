@@ -32,8 +32,14 @@ func GetMyBills(w http.ResponseWriter, r *http.Request) {
 	user_id := r.Context().Value("user_id").(int)
 	role := r.Context().Value("role").(string)
 	show := false
-	if unPaid == "unpaid" {
+	var message string
+	switch unPaid {
+	case "unpaid":
 		show = true
+		message = "You still have unpaid/ongoing orders. Please complete your orders before logging out"
+	case "wait":
+		show = true
+		message = "Thanks for paying the bill. Wait while the admin approves the payment!"
 	}
 	var myBills []types.ShortBillForm
 	err := models.GetShortBills(user_id, &myBills)
@@ -46,6 +52,7 @@ func GetMyBills(w http.ResponseWriter, r *http.Request) {
 		ShortBills: myBills,
 		Role:       role,
 		Show:       show,
+		Message:    message,
 	}
 	utils.RenderTemplate(w, "bills", data)
 }
@@ -64,8 +71,7 @@ func BillPayerHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Invalid JSON", http.StatusBadRequest)
 		return
 	}
-	orderIdString := strconv.Itoa(billpay.OrderId)
-	redirectURL := "/bill/completed/" + orderIdString + "?show=success"
+	redirectURL := "/bill?error=wait"
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]string{
 		"redirect": redirectURL,

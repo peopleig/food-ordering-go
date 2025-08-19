@@ -24,6 +24,19 @@ document.querySelectorAll('.decline-btn').forEach(btn => {
     });
 });
 
+document.querySelectorAll('.approve-payment-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+        const orderId = btn.getAttribute('data-order-id');
+        const res = await fetch(`/admin/payment/${orderId}`, { method: "POST" }); 
+        if (res.ok) {
+            alert("Approved Payment!")
+            window.location.href = '/admin';
+        } else {
+            alert("Approval failed.");
+        }
+    });
+});
+
 const rows = document.querySelectorAll("#orders_table_body tr");
 const filter_buttons = document.querySelectorAll(".order_buttons");
 filter_buttons.forEach(btn => {

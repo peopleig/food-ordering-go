@@ -1,6 +1,9 @@
 package types
 
-import "html/template"
+import (
+	"database/sql"
+	"html/template"
+)
 
 type NewUser struct {
 	Role       string `json:"role" schema:"role"`
@@ -95,11 +98,12 @@ type AdminData struct {
 }
 
 type Order struct {
-	OrderId      int    `json:"order_id"`
-	UserId       int    `json:"user_id"`
-	Status       string `json:"status"`
-	Order_type   string `json:"order_status"`
-	Table_number int    `json:"table_number"`
+	OrderId       int            `json:"order_id"`
+	UserId        int            `json:"user_id"`
+	Status        string         `json:"status"`
+	Order_type    string         `json:"order_status"`
+	Table_number  int            `json:"table_number"`
+	PaymentStatus sql.NullString `json:"payment_status"`
 }
 
 type BillOrder struct {
@@ -205,4 +209,5 @@ type ShortBillData struct {
 	ShortBills []ShortBillForm `json:"short_bills"`
 	Role       string          `json:"role"`
 	Show       bool            `json:"show"`
+	Message    string          `json:"message"`
 }

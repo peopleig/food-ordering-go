@@ -10,10 +10,10 @@ import (
 )
 
 var MenuCache = make(map[int]types.Item)
+var ByteMenuCache []byte
 var MenuCacheLoaded bool
 var CategoryCache []types.Categories
 var CategoryCacheLoaded bool
-var JSONMenuCache string
 
 type DBConfig struct {
 	User     string

@@ -187,3 +187,16 @@ func AdminCategoryHandler(w http.ResponseWriter, r *http.Request) {
 		utils.RenderTemplate(w, "add_dish", data)
 	}
 }
+
+func AdminPaymentApproveHandler(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	orderId, _ := strconv.Atoi(vars["order_id"])
+	err := models.ValidateBillPayment(orderId)
+	if err != nil {
+		fmt.Println(err)
+		http.Redirect(w, r, "/error?error=internal", http.StatusSeeOther)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+}

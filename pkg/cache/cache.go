@@ -21,7 +21,7 @@ func LoadMenu() error {
 			fmt.Println("Error marshaling JSON:", err)
 			return err
 		}
-		config.JSONMenuCache = string(jsonData)
+		config.ByteMenuCache = jsonData
 		config.MenuCacheLoaded = true
 	}
 	return nil

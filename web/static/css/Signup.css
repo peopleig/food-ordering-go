@@ -36,9 +36,7 @@
     color: #021945;
     font-family: 'Metamorphous', serif;
 }
-.d-grid{
-    margin-top: 2rem;
-}
+
 
 @media (max-width: 1300px) {
     #cover {
@@ -70,4 +68,9 @@
     border: none;
     margin-top: 1rem;
     color: #D6EEB7;
+}
+
+.alert-text {
+    font-size: small;
+    color: grey;
 }

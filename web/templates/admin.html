@@ -28,6 +28,7 @@
                         <th>User ID</th>
                         <th>Order Type</th>
                         <th>Table No.</th>
+                        <th>Payment</th>
                         <th>Bill</th>
                     </tr>
                 </thead>
@@ -57,6 +58,18 @@
                                 {{else}}
                                     {{.Table_number}}
                                 {{end}}
+                            </td>
+                            <td>
+                                {{if .PaymentStatus.Valid}}
+                                    {{if eq .PaymentStatus.String "pending"}}
+                                        <button class="btn btn-sm btn-success approve-payment-btn" data-order-id="{{.OrderId}}">Approve</button>
+                                    {{else}}
+                                        Paid!
+                                    {{end}}
+                                {{else}}
+                                    -
+                                {{end}}
+                                
                             </td>
                             <td>
                                 <form id="get_bill" action="/bill/preparing/{{.OrderId}}" method="GET" target="_blank">

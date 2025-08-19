@@ -1,7 +1,6 @@
 package models
 
 import (
-	"fmt"
 	"strings"
 
 	"github.com/peopleig/food-ordering-go/pkg/types"
@@ -31,18 +30,11 @@ func PaidbyUser(billpay *types.BillPay, user_id int) error {
 	query := `SELECT total_cost FROM Orders WHERE order_id = ?`
 	var initial_cost uint
 	err := DB.QueryRow(query, billpay.OrderId).Scan(&initial_cost)
-	fmt.Println(initial_cost)
 	if err != nil {
 		return err
 	}
-	query = `INSERT INTO Payment (order_id, tip_amount, discount_reward_points, amount_paid, payment_status) VALUES (?, ?, 0, ?, 'paid')`
+	query = `INSERT INTO Payment (order_id, tip_amount, discount_reward_points, amount_paid, payment_status) VALUES (?, ?, 0, ?, 'pending')`
 	_, err = DB.Exec(query, billpay.OrderId, billpay.Tip, initial_cost+billpay.Tip)
-	if err != nil {
-		return err
-	}
-	fmt.Println(initial_cost + billpay.Tip)
-	query = `UPDATE Orders SET status = 'completed' WHERE order_id = ?`
-	_, err = DB.Exec(query, billpay.OrderId)
 	if err != nil {
 		return err
 	}
